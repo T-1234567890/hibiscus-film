@@ -1,0 +1,75 @@
+{
+  "repository": "https://github.com/DhaliwalX/fotufilm-engine",
+  "revision": "d534fc99c7eee10a839d3bc4ae26501c286b32a0",
+  "adopted": "2026-11-13",
+  "license": "Apache-2.0",
+  "copyright": "Copyright 2026 MUAStudio Inc.",
+  "mode": "Selective source adaptation; independently maintained; no upstream package, submodule or update service",
+  "upstreamFiles": [
+    {
+      "path": "Sources/FotufilmCore/Math.swift",
+      "sha256": "7245553a09f24b39885aae1f017089f938987a7f1ac895f0713ac5bdb585f98e",
+      "selectedSymbols": [
+        "softplus"
+      ]
+    },
+    {
+      "path": "Sources/FotufilmCore/CharacteristicCurve.swift",
+      "sha256": "c0a0e827e7fcc052f20fdb2c7b7eed99d9f1ca768e0ec5c7089dfb919b3d9f6e",
+      "selectedSymbols": [
+        "CharacteristicCurveComponent.density",
+        "CharacteristicCurve.density"
+      ]
+    },
+    {
+      "path": "Sources/FotufilmCore/SampledCharacteristicCurve.swift",
+      "sha256": "1c64f8d0b9c5994a30ff50781a85462523fb65565c6b8e37f39185a9989d6642",
+      "selectedSymbols": [
+        "init(logExposure:density:)",
+        "value(at:)",
+        "hermite"
+      ]
+    },
+    {
+      "path": "Sources/FotufilmCore/SpectralModel.swift",
+      "sha256": "e2144e646d6a76fddba768794c05ae0c27d2352942ba259a8c13792f4f25d350",
+      "selectedSymbols": [
+        "SpectralGrid wavelength convention",
+        "SpectralRuntime.transmission",
+        "SpectralRuntime.paperExposure wavelength sum"
+      ]
+    },
+    {
+      "path": "Sources/FotufilmCore/FilmAbsorption.swift",
+      "sha256": "fe5ce41cf6d7a0c321356713515b152ade921bf6ae14c92fada1e5b6b939ecf1",
+      "selectedSymbols": [
+        "filmDensityOffset independent base principle"
+      ]
+    }
+  ],
+  "licenseEvidence": {
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "NOTICE": "29b40b650c923921effc961522501edfeed1c1fc3e281b8fa9325a394f28fdd6",
+    "LICENSING.md": "5c8a0425ea18b2c707d087c60ff825d1a3dc077c30adc158c80e34d9e2b5fb04",
+    "THIRD_PARTY_NOTICES.md": "115fe2c94b053e9dc51e2fb37074ce3f200f5af7ffb446ad93d43997c2199286"
+  },
+  "excluded": [
+    "47 CC BY-SA film profiles",
+    "CC BY-SA editor glyphs",
+    "Measured-reflectance posterior table and training spectra",
+    "CIE observer/illuminant tables",
+    "BSD xenon spectrum",
+    "Camera sensitivity datasets",
+    "Apps, editors, plugins, branding, images, codecs",
+    "RGB LUT preparation/application paths",
+    "Halide JIT/runtime and dependencies"
+  ],
+  "adaptations": [
+    "Immutable validated Swift values; invalid data throws instead of trapping",
+    "81 samples, 380\u2013780nm, 5nm; explicit trapezoidal nm integral instead of implicit sample sum",
+    "Up to 4 response populations, 1024 samples; bounded domains and safe extreme tails",
+    "Separate image dye amounts and base/fog, no fixed capture-to-dye identity",
+    "Native Metal scalar helpers and caller-owned bounded batch encoding; no additional queue, readback or full-frame spectrum allocation",
+    "No film profile or HSpec schema has been adopted"
+  ]
+}

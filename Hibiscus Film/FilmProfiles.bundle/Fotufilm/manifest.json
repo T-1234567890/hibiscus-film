@@ -1,0 +1,367 @@
+{
+  "version": 1,
+  "revision": "d534fc99c7eee10a839d3bc4ae26501c286b32a0",
+  "license": "CC-BY-SA-4.0",
+  "profiles": [
+    {
+      "file": "portra400",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/portra400.json",
+      "sourceSHA256": "cdcb94126acfddb45e7871c24e3eb1afdbc729abb09c64027c0974de01e0717c",
+      "binarySHA256": "20903c252b877b79549410abda48a89927773d0b0d4ac0c6f4c600a5dc727edb",
+      "maximumIsotonicCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "ektar100",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/ektar100.json",
+      "sourceSHA256": "bef8a35381c41f91f239c350ac608d37ed767cab74e59c54cccd0a5124a95104",
+      "binarySHA256": "9d7c4ff25c42cc801aac226220172ddd77c98a2d723c4546a771f92fd31623fd",
+      "maximumIsotonicCorrection": [
+        1.0817538911855884e-07,
+        0.0,
+        2.3557650385974682e-08
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "gold200",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/gold200.json",
+      "sourceSHA256": "8d54dbcee9fb3b55762cfc8e879953628ef3cd21a1dd5d3a4a483780b24b3174",
+      "binarySHA256": "990d1e3ef4bbffe687870a92745ae1c7901f0c1e1554b7d79da4eb056072aecc",
+      "maximumIsotonicCorrection": [
+        0.0,
+        1.0708132158754324e-09,
+        5.578272288531139e-10
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "pro400h",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/pro400h.json",
+      "sourceSHA256": "6c5e8a8e4434a4a9f1d52770be19419c49fa956f2e584c049410451eeaae8e41",
+      "binarySHA256": "fc4cc62a6dc2302c2ae5ddca598015600f489575dffb18cfa10a04a0e42a62c2",
+      "maximumIsotonicCorrection": [
+        0.0,
+        7.104940785707115e-07,
+        1.4390266755981429e-11
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "c200",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/c200.json",
+      "sourceSHA256": "e6de3b92a987f5207ba37dd516d1e677070672f7908b24d19b829e1b70bc0053",
+      "binarySHA256": "54b41e6713bcff96a059ce580a777735d27c68c5f8d014f6b46eb503c190e43b",
+      "maximumIsotonicCorrection": [
+        6.888580539321509e-10,
+        0.0,
+        0.0
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "ultramax400",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/ultramax400.json",
+      "sourceSHA256": "0de6f9bc4081d4d3e61c94cec90ebd0dc5fdacf0bd267ab408b17538a275a447",
+      "binarySHA256": "d346a38ce93a21d55b755f5012156bf75120408073db1bf04f2cad8edb974ecf",
+      "maximumIsotonicCorrection": [
+        0.0,
+        9.724554494994209e-11,
+        0.0023335209971415694
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "aerocolor2460",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/aerocolor2460.json",
+      "sourceSHA256": "4e7f21676fc57f097b3f528906b15707fa9d31b8ca6c0173b58e0421ccf76b8a",
+      "binarySHA256": "6960a51bf1067c5136035ffa86ab0d1d9d7214b6c69c1fd2f1fe3cc64b04c15f",
+      "maximumIsotonicCorrection": [
+        2.1394664884155645e-07,
+        6.309571964902005e-08,
+        8.468747925149955e-11
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "cinestill800t",
+      "colorResponseNote": "Shares the Vision3 500T color response; stock-specific grain and halation differences are not included.",
+      "manufacturer": "CineStill",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/cinestill800t.json",
+      "sourceSHA256": "2f998534ee8348c7b8ff8be16922ea9f6c2ebba4145aedcd9a58b5e815bac7fd",
+      "binarySHA256": "30a103318849a31b6be4c858af101dd8aa96be1d1a8681363716cbaea45434d2",
+      "maximumIsotonicCorrection": [
+        4.065564795929788e-08,
+        0.0003377687160392995,
+        9.897824559956803e-09
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.03723861,
+        0.0
+      ]
+    },
+    {
+      "file": "eterna500",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/eterna500.json",
+      "sourceSHA256": "c116a1dc302d0f55c41e5b43464633b56acc5653b50c0a1a8343c49d673f66a2",
+      "binarySHA256": "b97382ccdd9fdc62af5c049ed35015b8c3a4629c842675f6d7e1b7c5364e4d9e",
+      "maximumIsotonicCorrection": [
+        9.079705154402262e-09,
+        0.0,
+        8.399108064605088e-08
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "eternavivid500",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/eternavivid500.json",
+      "sourceSHA256": "03c8dba2de62b33335e5d8fec7138f11cca0c230618de34a3ee288b3f5ec3fcb",
+      "binarySHA256": "06502b308db147d645c97de8f6df46eb2d7c0c9696c6db3750be535ee919d3ad",
+      "maximumIsotonicCorrection": [
+        5.932783209150472e-09,
+        0.0,
+        3.551699145898368e-08
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "f64d",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/f64d.json",
+      "sourceSHA256": "a240aaceff81f0f522dff1f53cdecf3842c1161048e8c16c1e59d7d54deefdef",
+      "binarySHA256": "7d22b26eea05710f49d34b1f7dc5ecc2dd177a7456feb920eee6fef8b0fd7e70",
+      "maximumIsotonicCorrection": [
+        0.0,
+        8.926692672273084e-07,
+        0.0
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "kodacolor100",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/kodacolor100.json",
+      "sourceSHA256": "8c3c2b81864317041ab230dc69e57516fef82a28fe57588d205536884f10db9f",
+      "binarySHA256": "58221d633ec32883934da31a23cc20f7710d44067480cb510eddb8c7761dafd2",
+      "maximumIsotonicCorrection": [
+        0.0,
+        1.070833532956783e-09,
+        5.578330020128419e-10
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "pro160ns",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/pro160ns.json",
+      "sourceSHA256": "1550f3bd5f54feef49ca65fe81becd7b934e612a0a82da4321a1a3571af751ca",
+      "binarySHA256": "6e96d3bff7d48dd5e37c08cf463cce1b9cd20d0c000b7f122eda522262e930ca",
+      "maximumIsotonicCorrection": [
+        3.6457501022546523e-06,
+        8.149692032333178e-11,
+        0.0006139583769195767
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "reala100",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/reala100.json",
+      "sourceSHA256": "33016de53fecbc661576acf1071edf51d78e59f2b2c5efd8715d011db20ba7d1",
+      "binarySHA256": "43fe4a765d33fdb139d9dcab5ca444722b13144f9e676a0d1f7e9f2bed18f563",
+      "maximumIsotonicCorrection": [
+        8.420603103687085e-11,
+        0.0,
+        0.0048282378513500035
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "reala500d",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/reala500d.json",
+      "sourceSHA256": "f440ae9f5c2a5fffb244a3a6f685b800514a2407e9de5a0f1b941d319bbdc56d",
+      "binarySHA256": "17e54cf290ed0c2c84ce543f3f4702ed13715f1a983e838bc9be08a647fd8f77",
+      "maximumIsotonicCorrection": [
+        0.0,
+        2.832578505085337e-09,
+        0.0
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "superia200",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/superia200.json",
+      "sourceSHA256": "ef6a03d894ea860b8f7c9a7d1f6bcb69013def6d328e4709444349281b8ba218",
+      "binarySHA256": "32ba5531eb0dea23b4f8fb2f10e143ca92e1cc9288bcf9a0bf816b7efb4743bf",
+      "maximumIsotonicCorrection": [
+        0.0,
+        0.0,
+        3.1450522186560192e-09
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "superia400",
+      "colorResponseNote": null,
+      "manufacturer": "Fujifilm",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/superia400.json",
+      "sourceSHA256": "54b4df52654ac307b6437710552dd78a5203cefc8dc21cf5e25b19fb65e97658",
+      "binarySHA256": "631e85847c59b5993df244af0525777bc6cfbb051e2e9fc8ef02b81cba377eb7",
+      "maximumIsotonicCorrection": [
+        4.3035172647698516e-11,
+        6.110778549839324e-12,
+        1.322940645920312e-10
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "verita200d",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/verita200d.json",
+      "sourceSHA256": "a54bce59c5b5f0aad74bb062a39567e4936b86832cb94b661ae721f7394bf16e",
+      "binarySHA256": "b22a20c4cc8261f7ca09b19a8cf994887535b47555fbbea368b68e40c758a16c",
+      "maximumIsotonicCorrection": [
+        1.5927908316726302e-06,
+        8.709289271990883e-07,
+        0.0
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "file": "vision250d",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/vision250d.json",
+      "sourceSHA256": "c01e725e6a14710365f23e7f3e4d018a08bd80dd68e9769041c915586ce0628e",
+      "binarySHA256": "29795803f2ce6fd2ed0921051c38c4c62a7fb8b228836005d8a6d3105d5cd16b",
+      "maximumIsotonicCorrection": [
+        2.909936993589213e-07,
+        2.6592602653252584e-07,
+        4.625986452677644e-06
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.01911526,
+        0.0
+      ]
+    },
+    {
+      "file": "vision500t",
+      "colorResponseNote": null,
+      "manufacturer": "Kodak",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/vision500t.json",
+      "sourceSHA256": "79b2615d78179de9fa9e6aa091de9bf2451ce867510072105583f175eec5d2f3",
+      "binarySHA256": "86fe6734545b6646d0bf98bdb02c8ca429541dba708a46782eb4b330b9ff2afb",
+      "maximumIsotonicCorrection": [
+        4.065564795929788e-08,
+        0.0003377687160392995,
+        9.897824559956803e-09
+      ],
+      "maximumNonnegativeDyeCorrection": [
+        0.0,
+        0.03723861,
+        0.0
+      ]
+    }
+  ]
+}

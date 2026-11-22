@@ -1,0 +1,102 @@
+[
+  {
+    "id": "hibiscus-daylight100",
+    "file": "hibiscus-daylight100",
+    "name": "Daylight 100",
+    "iso": 100,
+    "swatch": 12428894,
+    "family": "Color negative",
+    "notes": "Travel, daylight and foliage. Clean color, fine grain, open shadows and bright whites.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-portrait160",
+    "file": "hibiscus-portrait160",
+    "name": "Portrait 160",
+    "iso": 160,
+    "swatch": 14065287,
+    "family": "Color negative",
+    "notes": "People and window light. Soft highlight shoulders and restrained reds keep skin gentle.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-gold200",
+    "file": "hibiscus-gold200",
+    "name": "Gold 200",
+    "iso": 200,
+    "swatch": 15047218,
+    "family": "Color negative",
+    "notes": "Late afternoon and backlight. Warm highlights, full midtones and lively yellows.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-pastel400",
+    "file": "hibiscus-pastel400",
+    "name": "Pastel 400",
+    "iso": 400,
+    "swatch": 11909812,
+    "family": "Color negative",
+    "notes": "Overcast scenes and light clothing. Gentle contrast, soft greens and pale highlights.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-street400",
+    "file": "hibiscus-street400",
+    "name": "Street 400",
+    "iso": 400,
+    "swatch": 5995639,
+    "family": "Color negative",
+    "notes": "Street scenes and hard sunlight. Firm shadows, strong midtones, and textured grain.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-tungsten800",
+    "file": "hibiscus-tungsten800",
+    "name": "Tungsten 800",
+    "iso": 800,
+    "swatch": 6004418,
+    "family": "Color negative",
+    "notes": "Available light at night. Cool ambient color, coarse grain and warm halos around lamps.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-mono100",
+    "file": "hibiscus-mono100",
+    "name": "Mono 100",
+    "iso": 100,
+    "swatch": 10199977,
+    "family": "Monochrome",
+    "notes": "Architecture and still life. Fine silver grain and a smooth progression into white.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-mono400",
+    "file": "hibiscus-mono400",
+    "name": "Mono 400",
+    "iso": 400,
+    "swatch": 5331554,
+    "family": "Monochrome",
+    "notes": "Documentary black and white. Weighty blacks, brighter midtones and pronounced grain.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-fade400",
+    "file": "hibiscus-fade400",
+    "name": "Fade 400",
+    "iso": 400,
+    "swatch": 11830642,
+    "family": "Color negative",
+    "notes": "Quiet scenes and vintage color. Lifted blacks, subdued saturation and compressed whites.",
+    "hasArchive": false
+  },
+  {
+    "id": "hibiscus-cinema500",
+    "file": "hibiscus-cinema500",
+    "name": "Cinema 500",
+    "iso": 500,
+    "swatch": 4742272,
+    "family": "Color negative",
+    "notes": "Mixed light and high-contrast scenes. Dense, cool shadows and soft, warm highlight separation.",
+    "hasArchive": false
+  }
+]

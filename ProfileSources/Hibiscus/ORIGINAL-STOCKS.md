@@ -1,0 +1,22 @@
+# Hibiscus Originals, first proposal
+
+The ten bundled recipes use synthetic spectral sensitivities and dye absorption, with separately authored characteristic curves, grain and halation. The ISO numbers describe the intended stock character. They do not set sensor ISO. This collection is proposed under CC BY-SA 4.0. The full license already ships with the profile resources.
+
+| Stock | Use and target rendering | Recipe and tuning priorities | Optional Fotufilm reference |
+| --- | --- | --- | --- |
+| Daylight 100 | Travel and foliage. Clean daylight balance, open shadows and bright whites with natural saturation. | Matched RGB curve slopes, fine grain, minimal halation. Check gray neutrality, foliage and snow first. | Reala 100 |
+| Portrait 160 | Faces and soft window light. Restrained red saturation and gentle highlights. | Lower slope, softer shoulder and modest dye overlap. Fine grain and very low halation. Tune skin across exposures and light sources. | PRO 160NS |
+| Gold 200 | Late-afternoon light. Warm, lively midtones and golden highlights with readable backlit shadows. | Red-biased response, medium contrast, fine-to-medium grain and a mild warm halo. Check against oversaturated skin. | Gold 200 |
+| Pastel 400 | Overcast streets and light clothing. Soft greens, lower saturation, open shadows and pale whites. | Broad sensitivity bands, shared dye absorption and early shoulders. Soft grain and faint halos. Check neutral whites. | PRO 400H |
+| Street 400 | Hard daylight and urban documentary. Firm shadows, punchy midtones and defined highlights. | Steeper slopes and a later toe, with moderate grain and low halation. Check signs and highlight clipping. | UltraMax 400 |
+| Tungsten 800 | Available light at night. Cool ambient color, visible grain and warm halos around lamps. | 3200 K stock reference, channel-specific curves, the strongest chromatic halation and coarse grain. Tune LED and mixed-light scenes. | CineStill 800T |
+| Mono 100 | Architecture and still life. Smooth gray transitions and fine grain. | Daylight panchromatic sensitivity, balanced silver records, moderate slope and minimal neutral halation. | Acros 100 II |
+| Mono 400 | Documentary black and white. Denser blacks, strong midtones and pronounced grain. | Steeper silver curves, coarser grain and restrained neutral halation. Check faces in harsh light. | HP5 Plus |
+| Fade 400 | Quiet scenes and low-saturation vintage color. Lifted dark detail and compressed whites. | Shallow slopes, an earlier toe, more internal flare, shared dye absorption, medium grain and mild halation. Tune the black floor across exposures. | Start from the synthetic Daylight design |
+| Cinema 500 | Mixed light and high-contrast scenes. Deep shadows, controlled whites and separated warm and cool colors. | Intermediate illuminant, offset RGB response, a soft highlight shoulder, medium grain and warm edge halation. Tune bright windows and mixed practical lights. | Eterna 500 or Vision3 500T |
+
+Any Fotufilm references listed are optional comparison or derivative starting points. None of the bundled ten copies those profile files. The closest candidate adaptations are Daylight, Portrait, Gold, Pastel, Street and the two monochromes. Tungsten, Fade and Cinema need more original tuning across a wider lighting range, and Portrait benefits from a broader skin-tone reference set. Starting a Kitchen recipe from a licensed Fotufilm stock retains its attribution and ShareAlike notice.
+
+Film Library lists stocks by name and offers a **Hibiscus Originals** filter. Recipe Kitchen uses the same library to select a starting stock or reopen a custom recipe. Blank Recipe starts from the synthetic daylight response with grain and halation disabled. The graph edits native optical density over log exposure, jointly or per red, green and blue record. The sensitivity graph edits the wavelength response for the same records. Saved recipes retain the precision of the Fotufilm definition and provenance in local storage. Matrix-compatible HSpec v2 exchanges spectral fields. It uses the existing spectrum and Matrix metadata chunks. Grain, halation, light and transport settings remain in the locally saved recipe. Color Pad positions are local editing state.
+
+Reference proofs use photographs from the existing [Matrix sample collection](../../../Hibiscus%20Matrix/Hibiscus%20Matrix/Resources/Photographs.bundle/Sources.txt) for comparison only.

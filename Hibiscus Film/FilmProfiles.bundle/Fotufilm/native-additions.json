@@ -1,0 +1,58 @@
+{
+  "revision": "d534fc99c7eee10a839d3bc4ae26501c286b32a0",
+  "license": "CC-BY-SA-4.0",
+  "attribution": "Fotufilm / MUAStudio Inc.",
+  "changes": "Unmodified native stock files. Display categories and icon colors assigned by Hibiscus Film. No Matrix HSpec adaptation.",
+  "profiles": [
+    {
+      "file": "trix400.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/trix400.json",
+      "sha256": "9d83989cb617a545ca934dc6bb053da1b5ce23f2639218c297a757f499c3e9bf"
+    },
+    {
+      "file": "hp5plus400.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/hp5plus400.json",
+      "sha256": "c6a9db0f138409eccc86f2fd019bafd3df57e491e43eaff54f84b828b03f8cec"
+    },
+    {
+      "file": "acros100.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/acros100.json",
+      "sha256": "592e2463a0c1d01db35e6f1515c87a6cb134234677bbec7adde8db4002be338c"
+    },
+    {
+      "file": "velvia50.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/velvia50.json",
+      "sha256": "b9ece93b5b91b5cf83f236c75390e47fa353eb88db444109f3291ec3bcaee5d3"
+    },
+    {
+      "file": "ektachromee100.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/ektachromee100.json",
+      "sha256": "aac4d69b16970c57d151872df7d2861613f45ba5ebd40648423bbd33ce3a53f9"
+    },
+    {
+      "file": "kodachrome64.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/kodachrome64.json",
+      "sha256": "5a5c491c469249e4e2f40b0b8f793eada29398d7f455aa5732870903b967591b"
+    },
+    {
+      "file": "instaxmini.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/instaxmini.json",
+      "sha256": "a677c78e2fb26a22c700ffdddb756ac4ee84893aa03494cf8170e4d8a1eabcc1"
+    },
+    {
+      "file": "instaxwide.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/instaxwide.json",
+      "sha256": "d6cd32530616e574ffd22e13ee9b2d8a655cc4a88c73c16cdf29da0fe1ca20fe"
+    },
+    {
+      "file": "lomochromepurple.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/lomochromepurple.json",
+      "sha256": "4cc317662c303fff4bac2be04c03881162fcf21dee9cf790ee24513970e951df"
+    },
+    {
+      "file": "aerochrome1443.json",
+      "source": "https://github.com/DhaliwalX/fotufilm-engine/blob/d534fc99c7eee10a839d3bc4ae26501c286b32a0/Sources/FotufilmCore/Stocks/aerochrome1443.json",
+      "sha256": "eaae9c31967ea72b8662a9345b96838817725aee9f8cab0354fd831cd1e17fcc"
+    }
+  ]
+}
