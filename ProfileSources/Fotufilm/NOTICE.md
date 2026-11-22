@@ -4,10 +4,10 @@ Copyright 2026 MUAStudio Inc. Profile data by **Fotufilm**, https://fotufilm.com
 Source: https://github.com/DhaliwalX/fotufilm-engine
 Pinned revision: d534fc99c7eee10a839d3bc4ae26501c286b32a0.
 
-The 20 selected original profiles and the Matrix-adapted JSON/HSpec files in this
-pack are distributed under **CC BY-SA 4.0**:
-https://creativecommons.org/licenses/by-sa/4.0/ . Full terms are in LICENSE.txt.
-The original upstream notice and licensing declaration are retained alongside it.
+The 30 Fotufilm profiles and the 20 Matrix-adapted JSON/HSpec files in this
+project are distributed under **CC BY-SA 4.0**. The app bundle carries the
+[full license](../../Hibiscus%20Film/FilmProfiles.bundle/Fotufilm/LICENSE.txt) and
+[original upstream notice](../../Hibiscus%20Film/FilmProfiles.bundle/Fotufilm/UPSTREAM-NOTICE.txt).
 This is a separately licensed data collection. This notice does not relicense
 Matrix application code or replace the engine's separate Apache-2.0 notices.
 
@@ -17,9 +17,10 @@ Portra 400, Ektar 100, Gold 200, PRO 400H, C200, UltraMax 400, Aerocolor IV 2460
 CineStill 800T, Eterna 500, Eterna Vivid 500, F-64D, Kodacolor 100, PRO 160NS,
 Reala 100, Reala 500D, Superia 200, Superia X-TRA 400, VERITA 200D, Vision3 250D
 and Vision3 500T. Original filenames,
-source hashes and exact source links are in manifest.json. Original profile files
-are unmodified in Originals/. Readable adapted specifications and matching binary
-HSpec files are in Adapted/. Modified/adapted profile data remains CC BY-SA 4.0.
+source hashes and exact source links are in [the manifest](../../Hibiscus%20Film/FilmProfiles.bundle/Fotufilm/manifest.json).
+The app bundle holds the unmodified [originals](../../Hibiscus%20Film/FilmProfiles.bundle/Fotufilm/Originals)
+and the matching [HSpec files](../../Hibiscus%20Film/FilmProfiles.bundle/Fotufilm/Adapted).
+The [readable adapted specifications](Adapted) are kept here. Adapted profile data remains CC BY-SA 4.0.
 
 Matrix adaptation, 2026-11-13:
 - Preserve the upstream 81-band sensitivity shapes, image dye absorption and
@@ -37,7 +38,7 @@ Matrix adaptation, 2026-11-13:
 - Assign stable Matrix profile UUIDs and revision 1. Existing photo snapshots keep
   their prior definitions. No upstream updater or ongoing synchronization is added.
 
-Rebuild with `python3 Tools/adapt-spectrum-profiles.py` from the repository root.
+Hibiscus Matrix's `Tools/adapt-spectrum-profiles.py` generated the adapted data.
 The converter validates original hashes against the pinned upstream manifest.
 Its code is separate from the licensed numerical data. Format conversion and
 fine-tuning do not remove the profile's ShareAlike requirements.
@@ -73,4 +74,4 @@ names identify the modeled materials; no manufacturer endorsement is implied.
 
 ## Hibiscus Film native additions
 
-Hibiscus Film also distributes ten unmodified Fotufilm definitions from the same pinned revision under CC BY-SA 4.0. Their upstream paths, attribution and SHA-256 hashes are recorded in `native-additions.json`. The Matrix adaptation history above applies to its original twenty profiles. Film assigns the library colors and categories in `catalog.json`.
+Hibiscus Film also distributes ten unmodified Fotufilm definitions from the same pinned revision under CC BY-SA 4.0. The [native-additions manifest](../../Hibiscus%20Film/FilmProfiles.bundle/Fotufilm/native-additions.json) records their upstream paths, attribution and SHA-256 hashes. The Matrix adaptation history above applies to its original twenty profiles. The [Film catalog](../../Hibiscus%20Film/FilmProfiles.bundle/Fotufilm/catalog.json) assigns library colors and categories.

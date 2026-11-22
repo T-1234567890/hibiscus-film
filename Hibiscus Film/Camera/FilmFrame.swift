@@ -1,4 +1,5 @@
 import CoreImage
+import CoreImage.CIFilterBuiltins
 import CoreText
 import Foundation
 
@@ -6,6 +7,22 @@ nonisolated enum FilmFrame {
     struct StockMark: Sendable {
         let name: String
         let swatch: AccentRGB?
+    }
+
+    struct FrameIndex: Sendable {
+        let position: Int
+
+        var label: String {
+            let number = position % 36 + 1
+            var roll = position / 36 + 1
+            var letters: [UInt8] = []
+            while roll > 0 {
+                roll -= 1
+                letters.append(65 + UInt8(roll % 26))
+                roll /= 26
+            }
+            return "\(number)\(String(decoding: letters.reversed(), as: UTF8.self))"
+        }
     }
 
     struct Layout {
@@ -45,6 +62,10 @@ nonisolated enum FilmFrame {
             let x = photo.minX + (CGFloat(index) + 0.5) * pitch - holeSize.width / 2
             return CGRect(origin: CGPoint(x: x, y: lower ? labelBandHeight : gateGap), size: holeSize)
         }
+
+        func gapCenter(after index: Int) -> CGFloat {
+            photo.minX + CGFloat(index + 1) * photo.width / CGFloat(perforations)
+        }
     }
 
     private static let base = AccentRGB(red: 0.062, green: 0.061, blue: 0.070)
@@ -81,16 +102,32 @@ nonisolated enum FilmFrame {
 
     /// Keeps the photo at its original pixel size. The upper and lower rails
     /// are the only parts rasterized separately before Core Image composites them.
-    static func compose(_ photo: CGImage, stock: StockMark, isHPan: Bool, recipeAccent: AccentRGB?) -> CIImage? {
+    static func compose(_ photo: CGImage, stock: StockMark, isHPan: Bool, recipeAccent: AccentRGB?,
+                        frameIndex: FrameIndex, captureISO: Int?) -> CIImage? {
         guard let typography else { return nil }
         let layout = Layout(width: photo.width, height: photo.height, isHPan: isHPan)
         let accent = palette(recipeAccent: recipeAccent, imageAccent: extractAccent(from: photo), stockAccent: stock.swatch)
+        let ink = cgColor(accent)
         guard let upper = rail(width: layout.canvas.width, height: layout.railHeight, draw: {
             drawPerforations(in: $0, layout: layout, lower: false)
-            drawUpperMarks(in: $0, layout: layout, accent: accent)
+            if layout.isHPan {
+                if let captureISO {
+                    let iso = isoRun(captureISO, typeSize: layout.labelBandHeight * 0.57, ink: ink, typography: typography)
+                    draw([iso], x: layout.photo.minX, y: layout.railHeight - layout.labelBandHeight / 2,
+                         width: layout.photo.width, alignment: .center, in: $0)
+                }
+            } else {
+                drawStockAndISO(in: $0, layout: layout, stockName: stock.name, captureISO: captureISO,
+                                ink: ink, typography: typography)
+            }
         }), let lower = rail(width: layout.canvas.width, height: layout.railHeight, draw: {
             drawPerforations(in: $0, layout: layout, lower: true)
-            drawEdgePrint(in: $0, layout: layout, stockName: stock.name, accent: accent, typography: typography)
+            if layout.isHPan {
+                drawPanoramicEdgePrint(in: $0, layout: layout, stockName: stock.name, frameIndex: frameIndex,
+                                       ink: ink, typography: typography)
+            } else {
+                drawStandardLowerEdge(in: $0, layout: layout, label: frameIndex.label, ink: ink, typography: typography)
+            }
         }) else { return nil }
 
         let backing = solid(base, in: layout.canvas)
@@ -98,7 +135,16 @@ nonisolated enum FilmFrame {
             .transformed(by: CGAffineTransform(translationX: 0, y: layout.photo.maxY))
         let translatedPhoto = CIImage(cgImage: photo)
             .transformed(by: CGAffineTransform(translationX: layout.photo.minX, y: layout.photo.minY))
-        return translatedPhoto.composited(over:
+        let aperture = CIFilter.roundedRectangleGenerator()
+        aperture.extent = layout.photo
+        aperture.radius = Float(min(layout.gateGap, min(layout.photo.width, layout.photo.height) / 2))
+        aperture.color = CIColor(red: 1, green: 1, blue: 1)
+        guard let mask = aperture.outputImage else { return nil }
+        let clipped = CIFilter.sourceInCompositing()
+        clipped.inputImage = translatedPhoto
+        clipped.backgroundImage = mask
+        guard let roundedPhoto = clipped.outputImage else { return nil }
+        return roundedPhoto.composited(over:
             translatedUpper.composited(over: CIImage(cgImage: lower).composited(over: backing))
         ).cropped(to: layout.canvas)
     }
@@ -158,41 +204,67 @@ nonisolated enum FilmFrame {
         }
     }
 
-    private static func drawUpperMarks(in context: CGContext, layout: Layout, accent: AccentRGB) {
+    private static func drawStockAndISO(in context: CGContext, layout: Layout, stockName: String, captureISO: Int?,
+                                        ink: CGColor, typography: Typography) {
         let left = layout.perforation(at: 0, lower: false).minX
         let right = layout.perforation(at: layout.perforations - 1, lower: false).maxX
-        let pitch = layout.photo.width / CGFloat(layout.perforations)
-        let unit = min(pitch / 6, layout.labelBandHeight * 0.36)
-        let height = layout.labelBandHeight * 0.28
-        let y = layout.railHeight - (layout.labelBandHeight + height) / 2
-        let marks = [
-            CGRect(x: left, y: y, width: unit * 3, height: height),
-            CGRect(x: left + unit * 4, y: y, width: unit, height: height),
-            CGRect(x: left + unit * 6, y: y, width: unit, height: height)
-        ]
-        let mirror = CGAffineTransform(a: -1, b: 0, c: 0, d: 1, tx: left + right, ty: 0)
-        context.setFillColor(cgColor(accent))
-        context.fill(marks + marks.map { $0.applying(mirror) })
+        let y = layout.railHeight - layout.labelBandHeight / 2
+        let typeSize = min(layout.labelBandHeight * 0.74, layout.photo.width / 22)
+        var nameEnd = right
+        if let captureISO {
+            let iso = isoRun(captureISO, typeSize: typeSize * 0.77, ink: ink, typography: typography)
+            let center = layout.gapCenter(after: layout.perforations - 2)
+            let width = min(ceil(advance(of: iso)), 2 * (right - center))
+            let x = center - width / 2
+            draw([iso], x: x, y: y, width: width, alignment: .center, in: context)
+            nameEnd = x - typeSize * 0.88
+        }
+        let stock = stockRun(stockName, typeSize: typeSize, ink: ink, typography: typography)
+        draw([stock], x: left, y: y, width: nameEnd - left, in: context)
     }
 
-    private static func drawEdgePrint(in context: CGContext, layout: Layout, stockName: String,
-                                      accent: AccentRGB, typography: Typography) {
+    private static func drawStandardLowerEdge(in context: CGContext, layout: Layout, label: String,
+                                               ink: CGColor, typography: Typography) {
+        let height = layout.labelBandHeight
+        let numberSize = min(height * 0.94, layout.photo.width / 18)
+        let left = layout.gapCenter(after: 0)
+        let right = layout.gapCenter(after: layout.perforations - 2)
+        let width = min(2 * (left - layout.photo.minX), right - left)
+        let face = CTFontCreateWithGraphicsFont(typography.stock, numberSize, nil, nil)
+        let symbol = CTFontCreateWithGraphicsFont(typography.symbol, numberSize * 0.88, nil, symbolLigatures)
+
+        draw([run("==>", font: symbol, color: ink)], x: left - width / 2, y: height / 2, width: width,
+             alignment: .center, in: context)
+        draw([run(label, font: face, color: ink)], x: right - width / 2, y: height / 2, width: width,
+             alignment: .center, in: context)
+    }
+
+    private static func drawPanoramicEdgePrint(in context: CGContext, layout: Layout, stockName: String,
+                                               frameIndex: FrameIndex, ink: CGColor, typography: Typography) {
         let left = layout.perforation(at: 0, lower: true).minX
         let right = layout.canvas.width - left
         let height = layout.labelBandHeight
-        let typeSize = min(height * 0.72, layout.photo.width / (layout.isHPan ? 30 : 22))
+        let typeSize = min(height * 0.72, layout.photo.width / 30)
         let tabX = right - typeSize * 5.9
-        let indexEnd = layout.isHPan ? tabX - typeSize * 0.65 : right
-        let index = CGRect(x: indexEnd - typeSize * 2.15, y: 0, width: typeSize * 2.15, height: height)
-        let ink = cgColor(accent)
+        let indexEnd = tabX - typeSize * 0.65
+        let label = frameIndex.label
+        let numberSize = min(height * 0.98, typeSize * 1.30)
+        let face = CTFontCreateWithGraphicsFont(typography.stock, numberSize, nil, nil)
+        let symbol = CTFontCreateWithGraphicsFont(typography.symbol, numberSize * 0.72, nil, symbolLigatures)
+        let number = run(label + " ", font: face, color: ink)
+        let arrow = run("==>", font: symbol, color: ink)
+        let width = ceil(advance(of: number) + advance(of: arrow))
+        let halfLabel = advance(of: run(label, font: face, color: ink)) / 2
+        let latestCenter = indexEnd - width + halfLabel
+        let center = (0..<(layout.perforations - 1)).map { layout.gapCenter(after: $0) }
+            .last { $0 <= latestCenter } ?? latestCenter
+        let indexStart = center - halfLabel
         let stock = stockRun(stockName, typeSize: typeSize, ink: ink, typography: typography)
-        draw([stock], x: left, y: height / 2, width: index.minX - typeSize * 0.6 - left, in: context)
-        drawEdgeIndex(in: context, region: index, typeSize: typeSize * 0.59, ink: ink, typography: typography)
+        draw([stock], x: left, y: height / 2, width: indexStart - typeSize * 0.6 - left, in: context)
+        draw([number, arrow], x: indexStart, y: height / 2, width: width, in: context)
 
-        if layout.isHPan {
-            let tab = CGRect(x: tabX, y: 0, width: layout.canvas.maxX - tabX, height: height * 0.78)
-            drawHPanTab(in: context, tab: tab, typeSize: typeSize, ink: ink, typography: typography)
-        }
+        let tab = CGRect(x: tabX, y: 0, width: layout.canvas.maxX - tabX, height: height * 0.78)
+        drawHPanTab(in: context, tab: tab, typeSize: typeSize, ink: ink, typography: typography)
     }
 
     private static func stockRun(_ name: String, typeSize: CGFloat, ink: CGColor, typography: Typography) -> NSAttributedString {
@@ -207,20 +279,9 @@ nonisolated enum FilmFrame {
         return attributed
     }
 
-    private static func drawEdgeIndex(in context: CGContext, region: CGRect, typeSize: CGFloat,
-                                      ink: CGColor, typography: Typography) {
-        let barWidth = typeSize * 0.12
-        let barHeight = region.height * 0.27
-        let bar = CGRect(x: region.minX, y: region.midY - barHeight / 2, width: barWidth, height: barHeight)
-        let barSpacing = barWidth * 2.4
-        context.setFillColor(ink)
-        context.fill([bar, bar.offsetBy(dx: barSpacing, dy: 0)])
-
-        let labelX = bar.maxX + barSpacing + typeSize * 0.34
+    private static func isoRun(_ iso: Int, typeSize: CGFloat, ink: CGColor, typography: Typography) -> NSAttributedString {
         let face = CTFontCreateWithGraphicsFont(typography.mark, typeSize, nil, nil)
-        let symbol = CTFontCreateWithGraphicsFont(typography.symbol, typeSize, nil, symbolLigatures)
-        draw([run("1A ", font: face, color: ink), run("->", font: symbol, color: ink)],
-             x: labelX, y: region.midY, width: region.maxX - labelX, in: context)
+        return run("ISO \(iso)", font: face, color: ink)
     }
 
     private static func drawHPanTab(in context: CGContext, tab: CGRect, typeSize: CGFloat,
@@ -241,7 +302,7 @@ nonisolated enum FilmFrame {
         let decimal = CTFontCreateWithGraphicsFont(typography.decimal, typeSize * 0.82, nil, nil)
         let graphite = cgColor(base)
         draw([run("HPan ", font: face, color: graphite), run("0.5", font: decimal, color: graphite)],
-             x: tab.minX + typeSize * 0.5, y: tab.midY, width: tab.width - typeSize, centered: true, in: context)
+             x: tab.minX + typeSize * 0.5, y: tab.midY, width: tab.width - typeSize, alignment: .center, in: context)
     }
 
     private static func rail(width: CGFloat, height: CGFloat, draw: (CGContext) -> Void) -> CGImage? {
@@ -261,8 +322,14 @@ nonisolated enum FilmFrame {
         ])
     }
 
+    private static func advance(of run: NSAttributedString) -> CGFloat {
+        CTLineGetTypographicBounds(CTLineCreateWithAttributedString(run), nil, nil, nil)
+    }
+
+    private enum EdgeAlignment { case left, center }
+
     private static func draw(_ runs: [NSAttributedString], x: CGFloat, y: CGFloat, width: CGFloat,
-                             centered: Bool = false, in context: CGContext) {
+                             alignment: EdgeAlignment = .left, in context: CGContext) {
         guard width > 0 else { return }
         let attributed = NSMutableAttributedString(string: "")
         runs.forEach(attributed.append)
@@ -280,7 +347,7 @@ nonisolated enum FilmFrame {
         }
         let resolvedScale = displayed === line ? scale : floorScale
         let box = CTLineGetBoundsWithOptions(displayed, .useGlyphPathBounds)
-        let offset = centered ? (width - CTLineGetTypographicBounds(displayed, nil, nil, nil) * resolvedScale) / 2 : 0
+        let offset = alignment == .center ? (width - CTLineGetTypographicBounds(displayed, nil, nil, nil) * resolvedScale) / 2 : 0
         context.saveGState()
         context.translateBy(x: x + offset, y: y - box.midY * resolvedScale)
         context.scaleBy(x: resolvedScale, y: resolvedScale)

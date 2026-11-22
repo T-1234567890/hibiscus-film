@@ -149,7 +149,7 @@ struct SettingsScreen: View {
                     }
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Hibiscus Film").font(.headline)
-                        Text("Film photography").foregroundStyle(.secondary)
+                        Text("Film. Print. Repeat.").foregroundStyle(.secondary)
                         Text(versionText).font(.caption).foregroundStyle(.tertiary)
                     }
                 }
@@ -228,6 +228,7 @@ private struct LegalNoticeScreen: View {
             }
             Section("Acknowledgements") {
                 Text("Fotufilm by MUAStudio Inc. provides the film simulation engine and stock profiles. Halide powers the engine’s image processing.")
+                Text("Film Frame draws inspiration from SpektraLab’s Film Edge.")
             }
             Section("Licenses and source notices") {
                 document("Mozilla Public License 2.0", Bundle.main.url(forResource: "MPL-2.0", withExtension: "txt"))

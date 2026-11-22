@@ -151,7 +151,7 @@ struct CameraScreen: View {
             let layout = CameraWorkspace(cameraFrame: proxy.frame(in: .named(CameraWorkspace.navigationSpace)),
                                          navigationSize: navigationSize, portraitRatio: camera.framingRatio.portraitRatio,
                                          fold: CameraWorkspace.division(in: proxy, pose: hingePose),
-                                         pose: hingePose, exposureVisible: showsExposure && !panoramic)
+                                         pose: hingePose, exposureVisible: showsExposure)
             let finder = panoramic ? HPan.finder(in: layout.finder) : layout.finder
             let width = finder.width
             let height = finder.height
@@ -205,22 +205,17 @@ struct CameraScreen: View {
                 .animation(.easeInOut(duration: reduceMotion ? 0.15 : 0.25), value: showRotationPrompt)
 
                 Group {
-                    if panoramic {
-                        panoramaControls(in: layout, finder: finder, size: size)
-                            .animation(reduceMotion ? nil : .smooth(duration: 0.28), value: camera.hpanOrientation)
-                    } else if layout.mode == .waistLevel {
+                    if layout.mode == .waistLevel {
                         waistLevelControls
                             .frame(width: layout.controls.width, height: layout.controls.height)
                             .position(x: layout.controls.midX, y: layout.controls.midY)
-                        zoomControl.position(layout.lens)
+                        if !panoramic { zoomControl.position(layout.lens) }
                     } else {
                         cameraTopBar()
                             .frame(width: max(1, (layout.mode == .portrait ? size.width : layout.finder.width) - 24))
                             .position(x: layout.finder.midX, y: layout.finder.minY + 28)
-                        if layout.verticalDivision == nil { zoomControl.position(layout.lens) }
-                    }
-                    if layout.mode != .waistLevel {
-                        cameraControls(layout, shutterOnly: panoramic)
+                        if !panoramic && layout.verticalDivision == nil { zoomControl.position(layout.lens) }
+                        cameraControls(layout)
                             .padding(.horizontal, 10)
                             .padding(.bottom, 10)
                             .frame(width: layout.controls.width, height: layout.controls.height, alignment: .bottom)
@@ -263,43 +258,6 @@ struct CameraScreen: View {
             .animation(reduceMotion ? nil : .smooth(duration: 0.25), value: camera.selectedRatio)
             .animation(reduceMotion ? nil : .smooth(duration: 0.25), value: layout.mode)
         }
-    }
-
-    private func panoramaControls(in layout: CameraWorkspace, finder: CGRect, size: CGSize) -> some View {
-        let uprightAnchor = layout.mode == .waistLevel
-            ? CGPoint(x: layout.controls.midX, y: layout.controls.maxY - 38)
-            : CGPoint(x: layout.finder.midX, y: layout.finder.minY + 28)
-        let left = camera.hpanOrientation == .landscapeLeft
-        let lowerEdge = left ? finder.minX / 2 : (finder.maxX + size.width) / 2
-        let landscapeAnchor = CGPoint(x: lowerEdge, y: finder.midY)
-        return panoramaOptions
-            .position(camera.hpanOrientation.isLandscape ? landscapeAnchor : uprightAnchor)
-    }
-
-    private var panoramaOptions: some View {
-        HibiscusGlassContainer(spacing: 7) {
-            HStack(spacing: 7) {
-                ratioTopControl
-                Button {
-                    showsLibrary = true
-                } label: {
-                    VStack(spacing: 2) {
-                        StockStyleMark(stock: film.active, size: 22)
-                        Text(verbatim: film.active.name)
-                            .font(.caption2.weight(.semibold))
-                            .lineLimit(1)
-                            .frame(width: 62)
-                    }
-                }
-                .hibiscusGlassButtonStyle()
-                .accessibilityLabel(Text(verbatim: film.active.name))
-                .accessibilityHint("Opens the film library")
-                gridButton
-                adjustTopControl
-            }
-        }
-        .fixedSize()
-        .rotationEffect(hpanControlRotation)
     }
 
     private var zoomControl: some View {
@@ -357,11 +315,13 @@ struct CameraScreen: View {
     private func cameraTopBar(compact: Bool = false) -> some View {
         HibiscusGlassContainer(spacing: 7) {
             HStack(spacing: 7) {
-                flashTopControl
-                livePhotoTopControl
+                if !camera.hpanEnabled {
+                    flashTopControl
+                    livePhotoTopControl
+                }
                 if !compact { Spacer() }
                 ratioTopControl
-                qualityTopControl
+                if !camera.hpanEnabled { qualityTopControl }
                 adjustTopControl
             }
         }
@@ -540,23 +500,26 @@ struct CameraScreen: View {
     }
 
     private var waistLevelControls: some View {
-        ViewThatFits(in: .vertical) {
-            VStack(spacing: 0) {
-                GeometryReader { space in
-                    let side = min(112, space.size.height * 0.60, space.size.width * 0.24)
-                    if let icon = UIImage.hibiscusAppIcon, side >= 28 {
-                        Image(uiImage: icon)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: side, height: side)
-                            .clipShape(RoundedRectangle(cornerRadius: side * 0.225, style: .continuous))
-                            .position(x: space.size.width / 2, y: space.size.height / 2)
-                            .accessibilityHidden(true)
+        VStack(spacing: 0) {
+            if camera.hpanEnabled { cameraTopBar().padding(.top, 6) }
+            ViewThatFits(in: .vertical) {
+                VStack(spacing: 0) {
+                    GeometryReader { space in
+                        let side = min(112, space.size.height * 0.60, space.size.width * 0.24)
+                        if let icon = UIImage.hibiscusAppIcon, side >= 28 {
+                            Image(uiImage: icon)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: side, height: side)
+                                .clipShape(RoundedRectangle(cornerRadius: side * 0.225, style: .continuous))
+                                .position(x: space.size.width / 2, y: space.size.height / 2)
+                                .accessibilityHidden(true)
+                        }
                     }
+                    waistLevelSettings.fixedSize(horizontal: false, vertical: true)
                 }
-                waistLevelSettings.fixedSize(horizontal: false, vertical: true)
+                ScrollView { waistLevelSettings }
             }
-            ScrollView { waistLevelSettings }
         }
         .padding(.horizontal, 10)
         .padding(.bottom, 8)
@@ -564,7 +527,7 @@ struct CameraScreen: View {
 
     private var waistLevelSettings: some View {
         VStack(spacing: 4) {
-            cameraTopBar(compact: true)
+            if !camera.hpanEnabled { cameraTopBar(compact: true) }
             VStack(spacing: 4) {
                 HStack(spacing: 8) {
                     stockButton
@@ -581,44 +544,36 @@ struct CameraScreen: View {
         .frame(maxWidth: 420)
     }
 
-    private func cameraControls(_ layout: CameraWorkspace, shutterOnly: Bool) -> some View {
+    private func cameraControls(_ layout: CameraWorkspace) -> some View {
         Group {
             if let division = layout.verticalDivision {
                 // Each half has matching edge insets and a centered shutter-height control row.
                 HStack(spacing: 0) {
-                    Group {
-                        if shutterOnly {
-                            Color.clear.allowsHitTesting(false)
-                        } else {
-                            VStack(spacing: 6) {
-                                HStack {
-                                    stockButton
-                                    zoomControl
-                                }
-                                .frame(minHeight: CameraWorkspace.shutterDiameter)
-                                expandedExposure
-                            }
-                            .frame(maxHeight: .infinity)
-                            .modifier(CameraDeckSurface(tint: cameraSurfaceTint))
+                    VStack(spacing: 6) {
+                        HStack {
+                            stockButton
+                            if !camera.hpanEnabled { zoomControl }
                         }
+                        .frame(minHeight: CameraWorkspace.shutterDiameter)
+                        expandedExposure
                     }
+                    .frame(maxHeight: .infinity)
+                    .modifier(CameraDeckSurface(tint: cameraSurfaceTint))
                     .frame(width: division.minX - 20)
 
                     Spacer().frame(width: division.width + 20)
 
-                    captureControlRow(shutterOnly: shutterOnly)
+                    captureControlRow
                         .frame(maxHeight: .infinity)
-                        .modifier(CameraDeckSurface(tint: cameraSurfaceTint, showsSurface: !shutterOnly))
+                        .modifier(CameraDeckSurface(tint: cameraSurfaceTint))
                 }
             } else {
                 VStack(spacing: 6) {
-                    if !shutterOnly {
-                        stockButton
-                        expandedExposure
-                    }
-                    captureControlRow(shutterOnly: shutterOnly)
+                    stockButton
+                    expandedExposure
+                    captureControlRow
                 }
-                .modifier(CameraDeckSurface(tint: cameraSurfaceTint, showsSurface: !shutterOnly))
+                .modifier(CameraDeckSurface(tint: cameraSurfaceTint))
             }
         }
     }
@@ -724,13 +679,13 @@ struct CameraScreen: View {
         }
     }
 
-    private func captureControlRow(shutterOnly: Bool) -> some View {
+    private var captureControlRow: some View {
         HStack {
-            if !shutterOnly { exposureButton }
+            exposureButton
             Spacer()
             CameraShutterButton(camera: camera, diameter: CameraWorkspace.shutterDiameter)
             Spacer()
-            if !shutterOnly { gridButton }
+            gridButton
         }
         .foregroundStyle(.white)
         .padding(.horizontal, 18)
@@ -1102,13 +1057,12 @@ private struct CameraGrid: View {
 
 private struct CameraDeckSurface: ViewModifier {
     let tint: Color
-    var showsSurface = true
 
     func body(content: Content) -> some View {
         content
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
-            .hibiscusGlass(tint: tint.opacity(0.075), isEnabled: showsSurface,
+            .hibiscusGlass(tint: tint.opacity(0.075),
                            in: RoundedRectangle(cornerRadius: 26, style: .continuous))
     }
 }

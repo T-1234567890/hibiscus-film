@@ -1,4 +1,6 @@
 // swift-tools-version: 5.9
+// Modified by Hibiscus Film: select the iOS engine targets, link prebuilt Halide kernels,
+// and optimize spectral table construction in Debug builds.
 import PackageDescription
 
 // Stock selection builds the spectral tables on first use, including in development builds.

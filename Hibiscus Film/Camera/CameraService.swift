@@ -3,6 +3,7 @@
 @preconcurrency import AVFoundation
 import Combine
 import CoreImage
+import ImageIO
 import Metal
 import Photos
 import SwiftUI
@@ -105,6 +106,7 @@ final class CameraService: NSObject, ObservableObject {
     @Published private(set) var isProcessingCapture = false
     static let defaultAutoSave = true
     static let autoSaveKey = "automaticallySaveCameraPhotos"
+    private static let nextFramePositionKey = "nextFilmFramePosition"
     private var autoSavePending: CameraAutoSaveFormat?
     @Published private(set) var savedVariants: Set<CameraExportVariant> = []
     private var originalSaved = false
@@ -141,6 +143,7 @@ final class CameraService: NSObject, ObservableObject {
     nonisolated(unsafe) private var pendingProcessedImage: UIImage?
     nonisolated(unsafe) private var pendingPreviewImage: UIImage?
     nonisolated(unsafe) private var pendingRawData: Data?
+    nonisolated(unsafe) private var pendingCaptureISO: Int?
     nonisolated(unsafe) private var captureRequiresRAW = false
     nonisolated(unsafe) private var captureDeliveryComplete = false
     nonisolated(unsafe) private var pendingLivePhotoData: Data?
@@ -150,6 +153,7 @@ final class CameraService: NSObject, ObservableObject {
     nonisolated(unsafe) private var captureCharacter: OriginalStyle? = nil
     nonisolated(unsafe) private var captureCharacterAdjustment = Recipe()
     private var captureFrameStock = FilmFrame.StockMark(name: "Hibiscus", swatch: nil)
+    private var captureFrameIndex: FilmFrame.FrameIndex?
     nonisolated(unsafe) private var captureLiveAspectRatio = CameraAspectRatio.standard.portraitRatio
     nonisolated(unsafe) private var captureLiveTargetMegapixels = 12
     nonisolated(unsafe) private var captureProcessingToken = UUID()
@@ -354,10 +358,12 @@ final class CameraService: NSObject, ObservableObject {
         isCapturing = true
         isProcessingCapture = true
         capturedDate = Date()
+        captureFrameIndex = nil
         pendingProcessedImage = nil
         pendingPreviewImage = nil
         pendingHPanOriginal = nil
         pendingRawData = nil
+        pendingCaptureISO = nil
         pendingLivePhotoData = nil
         if let pendingLivePhotoMovieURL { try? FileManager.default.removeItem(at: pendingLivePhotoMovieURL) }
         pendingLivePhotoMovieURL = nil
@@ -784,7 +790,7 @@ final class CameraService: NSObject, ObservableObject {
     }
 
     func captureForExport() -> CameraCaptureExport? {
-        guard canExportCapture, let cgImage = pendingProcessedImage?.cgImage else { return nil }
+        guard canExportCapture, let cgImage = pendingProcessedImage?.cgImage, let captureFrameIndex else { return nil }
         let recipe = captureCharacterAdjustment
         let base = recipe.accentBase
         let accent: AccentRGB?
@@ -795,12 +801,20 @@ final class CameraService: NSObject, ObservableObject {
         } else {
             accent = nil
         }
-        return CameraCaptureExport(photo: cgImage, stock: captureFrameStock, recipeAccent: accent, isHPan: captureIsHPan)
+        return CameraCaptureExport(photo: cgImage, stock: captureFrameStock, recipeAccent: accent,
+                                   isHPan: captureIsHPan, frameIndex: captureFrameIndex, captureISO: pendingCaptureISO)
     }
 
     // Delivery and full-resolution processing can finish in either order.
-    private func autoSaveIfReady() {
-        guard let format = autoSavePending, canExportCapture, !captureRequiresRAW || pendingRawData != nil else { return }
+    private func finishCaptureIfReady() {
+        guard canExportCapture else { return }
+        if captureFrameIndex == nil {
+            let defaults = UserDefaults.standard
+            let position = max(0, defaults.integer(forKey: Self.nextFramePositionKey))
+            captureFrameIndex = FilmFrame.FrameIndex(position: position)
+            defaults.set(position == Int.max ? 0 : position + 1, forKey: Self.nextFramePositionKey)
+        }
+        guard let format = autoSavePending, !captureRequiresRAW || pendingRawData != nil else { return }
         autoSavePending = nil
         saveCapture(format.variants)
     }
@@ -1824,6 +1838,11 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
             guard let first = UIImage(data: bytes) else { return }
             reference = first
         }
+        if let exif = photo.metadata[kCGImagePropertyExifDictionary as String] as? [String: Any] {
+            let speed = exif[kCGImagePropertyExifISOSpeed as String] as? NSNumber
+            let rating = (exif[kCGImagePropertyExifISOSpeedRatings as String] as? [NSNumber])?.first
+            pendingCaptureISO = [speed, rating].compactMap { $0?.intValue }.first { $0 > 0 }
+        }
         if captureIsHPan {
             guard let style = captureCharacter,
                   let panorama = CameraImageRenderer.panoramicImage(image, character: style, adjustment: captureCharacterAdjustment,
@@ -1873,7 +1892,7 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
                 }
                 if !self.captureUsesLivePhoto {
                     self.isProcessingCapture = false
-                    self.autoSaveIfReady()
+                    self.finishCaptureIfReady()
                 }
             }
         }
@@ -1967,7 +1986,7 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
                 self.statusMessage = LanguageManager.text("RAW capture failed. Please retake the photo.")
             }
             self.stop()
-            self.autoSaveIfReady()
+            self.finishCaptureIfReady()
         }
         guard error == nil, usesLivePhoto,
               let livePhotoData, let livePhotoMovieURL else {
@@ -2004,7 +2023,7 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
                 self.pendingProcessedImage = still
             }
             self.isProcessingCapture = false
-            self.autoSaveIfReady()
+            self.finishCaptureIfReady()
             if output == nil {
                 self.statusMessage = LanguageManager.text("Couldn’t capture this Live Photo.")
             }

@@ -17,4 +17,4 @@ In your pull request, describe the change, include the checks and device version
 
 ## License and branding
 
-Contributions to project source use [MPL-2.0](LICENSE). Keep the original terms and notices with third-party code, profiles, and fonts. For redistributed builds, follow the [branding guidance](README.md#brand-and-marketing-assets).
+Keep each component’s existing license, attribution, and change notices with your contributions. See the [component licenses](README.md#component-licenses) and [distribution notes](NOTICE.txt). For redistributed builds, follow the [branding guidance](README.md#brand-and-marketing-assets).

@@ -986,6 +986,17 @@
         }
       }
     },
+    "Effects" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "特效"
+          }
+        }
+      }
+    },
     "English" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1183,12 +1194,12 @@
         }
       }
     },
-    "Film photography" : {
+    "Film Frame draws inspiration from SpektraLab’s Film Edge." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "胶片摄影"
+            "value" : "胶片边框的设计灵感来自 SpektraLab 的 Film Edge 功能。"
           }
         }
       }
@@ -1209,6 +1220,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "胶片配置署名与改编说明"
+          }
+        }
+      }
+    },
+    "Film. Print. Repeat." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胶片。印相。再来。"
           }
         }
       }
@@ -1310,17 +1331,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "免费且开源"
-          }
-        }
-      }
-    },
-    "FX" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "特效"
           }
         }
       }

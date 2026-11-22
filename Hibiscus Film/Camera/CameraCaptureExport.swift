@@ -43,6 +43,8 @@ nonisolated struct CameraCaptureExport: Sendable {
     let stock: FilmFrame.StockMark
     let recipeAccent: AccentRGB?
     let isHPan: Bool
+    let frameIndex: FilmFrame.FrameIndex
+    let captureISO: Int?
 
     private static let context = CIContext(options: [.cacheIntermediates: false])
 
@@ -60,7 +62,8 @@ nonisolated struct CameraCaptureExport: Sendable {
             CGImageDestinationAddImage(target, photo, [kCGImageDestinationLossyCompressionQuality: quality] as CFDictionary)
             guard CGImageDestinationFinalize(target) else { throw CocoaError(.fileWriteUnknown) }
         case .filmFrame:
-            guard let image = FilmFrame.compose(photo, stock: stock, isHPan: isHPan, recipeAccent: recipeAccent) else {
+            guard let image = FilmFrame.compose(photo, stock: stock, isHPan: isHPan,
+                                                recipeAccent: recipeAccent, frameIndex: frameIndex, captureISO: captureISO) else {
                 throw CocoaError(.coderInvalidValue)
             }
             try Self.context.writeJPEGRepresentation(of: image, to: file.url,

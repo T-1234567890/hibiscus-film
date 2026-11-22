@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Hibiscus Film</h1>
-<p align="center"><strong>Film photography on iPhone.</strong></p>
+<p align="center"><strong>Film. Print. Repeat.</strong></p>
 
 <p align="center">
   <a href="https://github.com/T-1234567890/hibiscus-app">Original Hibiscus</a>
@@ -14,7 +14,7 @@
 Hibiscus Film is an open-source iPhone camera and photographic effects app built with SwiftUI, AVFoundation, Core Image, and Metal. It pairs the Fotufilm Engine with the live color controls of the original Hibiscus app.
 
 - **Camera** uses the selected film stock in the live viewfinder and develops the capture with that stock.
-- **FX** applies print and photographic treatments to imported photos and supported Live Photos.
+- **Effects** applies print and photographic treatments to imported photos and supported Live Photos.
 
 ## Camera
 
@@ -44,19 +44,19 @@ Import and export compatible `.hspec` base recipes from Settings and the Film Li
 
 Kitchen exports carry the supported spectral recipe and metadata. Engine-specific grain and halation settings and Color Pad positions stay in the local recipe or its local adjustments. See the [HSpec parameter mapping](ProfileSources/Hibiscus/HSPEC-PARAMETER-MAPPING.md).
 
-## FX
+## Effects
 
 Import a photograph or Live Photo and choose an effect, then adjust its intensity. Effects include Newsprint, Magazine, Photocopy, Risograph, Duotone, Fiber Print, Warm Print, ASCII, Cyanotype, Engraving, Solarization, Archive, Fade, Chromatic Drift, and Halftone. Effects with selectable inks offer color palettes alongside the intensity control.
 
-The Hibiscus Print Engine handles FX. Fotufilm handles camera film simulation and recipe previews.
+The Hibiscus Print Engine handles Effects. Fotufilm handles camera film simulation and recipe previews.
 
 ## Export
 
 - **Photo Only** saves or shares the developed photograph. Supported Live Photo captures retain their motion.
-- **With Film Frame** adds an optional film edge outside the photograph at its rendered resolution. The edge can carry the stock name, an image-derived accent, and the HPan mark. The framed variant of a Live Photo is a still.
+- **With Film Frame** adds an optional film edge with a rounded photo opening. Standard frames show the stock name and available capture ISO above the photo, with the arrow and frame number at opposite ends of the lower edge. HPan frames center the available capture ISO above the photo and carry the HPan mark below. The framed variant of a Live Photo is a still. The film edge is inspired by [SpektraLab’s Film Edge](https://spektralab.app/user_guide/).
 - **Auto Save** can save the photo, the framed version, or both. Captured panoramas can also retain the original exposure.
 
-FX exports the processed photograph or a supported processed Live Photo. Source photos remain in the Photos library.
+Effects exports the processed photograph or a supported processed Live Photo. Source photos remain in the Photos library.
 
 ## Requirements
 
@@ -91,13 +91,27 @@ The app requests camera, microphone, and Photos access when the corresponding ca
 
 See [Contributing](CONTRIBUTING.md) for local testing and pull request guidance.
 
-## License
+## Component licenses
 
-Hibiscus Film source is licensed under the [Mozilla Public License 2.0](LICENSE). Vendored software, film profiles, and fonts retain their respective licenses. See [NOTICE](NOTICE.txt), the [Fotufilm license](Vendor/Fotufilm/LICENSE), the [film profile notices](ProfileSources/Fotufilm/NOTICE.md), and the [Inter](Hibiscus%20Film/FilmFrameFonts.bundle/Inter-OFL.txt) and [JetBrains Mono](Hibiscus%20Film/FilmFrameFonts.bundle/JetBrainsMono-OFL.txt) licenses.
+Each component carries its own license. The project-wide license for original Hibiscus Film source will be selected separately on GitHub. [Attributions and distribution notes](NOTICE.txt)
+
+| Component | Applicable terms |
+| --- | --- |
+| Covered source adapted from Hibiscus and Hibiscus Matrix | [MPL-2.0](Hibiscus%20Film/MPL-2.0.txt) |
+| Fotufilm engine and the adapted spectral math | [Apache-2.0](Vendor/Fotufilm/LICENSE) and [Fotufilm NOTICE](Vendor/Fotufilm/NOTICE) |
+| Halide runtime in the prebuilt kernels | [MIT and upstream notices](Hibiscus%20Film/FilmProfiles.bundle/EngineNotices/HALIDE-LICENSE.txt) |
+| Fotufilm film profiles and their adaptations, including HSpec | [CC BY-SA 4.0](Hibiscus%20Film/FilmProfiles.bundle/Fotufilm/LICENSE.txt) and [profile attribution and changes](ProfileSources/Fotufilm/NOTICE.md) |
+| Reflectance data and the `colour-science` xenon spectrum | [Dataset-specific terms and BSD 3-Clause notice](Vendor/Fotufilm/THIRD_PARTY_NOTICES.md) |
+| Inter and JetBrains Mono | SIL OFL 1.1. [Inter notice](Hibiscus%20Film/FilmFrameFonts.bundle/Inter-OFL.txt) and [JetBrains Mono notice](Hibiscus%20Film/FilmFrameFonts.bundle/JetBrainsMono-OFL.txt) |
+| Hibiscus Originals recipe data | The recipe metadata identifies CC BY-SA 4.0. [Original-stock proposal](ProfileSources/Hibiscus/ORIGINAL-STOCKS.md) |
+
+## Legal notice
+
+Hibiscus Film uses manufacturer and film stock names only to identify the photographic materials each profile models. All trademarks belong to their respective owners. These references do not imply affiliation with, sponsorship by, or endorsement from the manufacturers.
 
 ## Brand and marketing assets
 
-The Hibiscus Film name, icon, and visual identity identify the project. Use your own branding for redistributed forks. Film manufacturer and stock names identify the photographic materials modeled by the profiles.
+The Hibiscus Film name, icon, and visual identity identify the project. Use your own branding for redistributed forks.
 
 ## Unofficial builds and redistribution
 

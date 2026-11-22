@@ -1,6 +1,6 @@
 import SwiftUI
 
-private enum FilmTab: Hashable { case camera, create, settings }
+private enum FilmTab: Hashable { case camera, effects, settings }
 
 struct ContentView: View {
     @EnvironmentObject private var languageManager: LanguageManager
@@ -33,7 +33,7 @@ struct ContentView: View {
                         }
                     }
                 }
-                Tab(languageManager.string("FX"), systemImage: "square.stack.3d.up", value: FilmTab.create) {
+                Tab(languageManager.string("Effects"), systemImage: "square.stack.3d.up", value: FilmTab.effects) {
                     NavigationStack { CreateScreen() }
                 }
                 Tab(languageManager.string("Settings"), systemImage: "gearshape", value: FilmTab.settings) {

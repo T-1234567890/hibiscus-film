@@ -1,7 +1,8 @@
 // Spectrum adaptations of Fotufilm, Copyright 2026 MUAStudio Inc., Apache-2.0.
 // Modified for Matrix 2026-11-13: immutable validated types, explicit integration
 // units/base density, bounded numeric domains and no Halide/data/LUT dependencies.
-// Exact upstream revision, symbols and changes: ThirdPartyNotices/Spectrum-Fotufilm.
+// Modified for Hibiscus Film: iOS integration and localized diagnostics.
+// Upstream revision, symbols and changes: ProfileSources/SpectrumNotices/ADOPTION.md.
 import Foundation
 
 nonisolated enum SpectrumError: Error, LocalizedError {

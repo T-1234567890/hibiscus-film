@@ -2,8 +2,8 @@
 
 Adopted 2026-11-13 from [Fotufilm](https://github.com/DhaliwalX/fotufilm-engine),
 revision **d534fc99c7eee10a839d3bc4ae26501c286b32a0** (2026-11-12).
-Copyright 2026 MUAStudio Inc. Selected engine source is Apache-2.0;
-the original `LICENSE` and `NOTICE` are retained beside this file.
+Copyright 2026 MUAStudio Inc. Selected engine source is Apache-2.0. See
+the original [LICENSE](../../Vendor/Fotufilm/LICENSE) and [NOTICE](../../Vendor/Fotufilm/NOTICE).
 
 Matrix maintains these adaptations independently. No Fotufilm package, submodule,
 updater, branding or upstream-maintenance obligation is added.

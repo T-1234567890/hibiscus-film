@@ -1,3 +1,52 @@
-Derived from Hibiscus (https://github.com/T-1234567890/hibiscus-app) and Hibiscus Matrix. The original style algorithms and Color Pad derive from Hibiscus revision 1a409d2c54f0ea984d42876ad603615bab7987c0. Film adapts the Matrix pad for iOS touch. See MPL-2.0.txt. GradeScreen.swift adapts the photo editor layout from Hibiscus GradeView.swift.
+Hibiscus Film component notices
+
+Covered Hibiscus and Hibiscus Matrix source — MPL-2.0
+The original style algorithms and Color Pad derive from Hibiscus
+(https://github.com/T-1234567890/hibiscus-app) revision
+1a409d2c54f0ea984d42876ad603615bab7987c0. Film adapts the Matrix pad for iOS
+touch. GradeScreen.swift adapts the photo editor layout from Hibiscus
+GradeView.swift. Preserve the covered source file notices and the license in
+Hibiscus Film/MPL-2.0.txt.
+
+Fotufilm — Apache-2.0
+Copyright 2026 MUAStudio Inc. The vendored engine and the Fotufilm-derived
+spectral math retain their Apache-2.0 terms. See Vendor/Fotufilm/LICENSE,
+Vendor/Fotufilm/NOTICE, and Vendor/Fotufilm/INTEGRATION.md for the upstream
+revision and local changes. The bundle carries the engine license and notice
+in FilmProfiles.bundle/EngineNotices.
+
+Halide and bundled spectral data
+The static kernel archives include Halide runtime code under MIT. The full
+Halide copyright and license notice is in
+Hibiscus Film/FilmProfiles.bundle/EngineNotices/HALIDE-LICENSE.txt.
+Vendor/Fotufilm/THIRD_PARTY_NOTICES.md records the source-specific terms for
+the reflectance prior, including CC BY 4.0, Apache-2.0 and public-domain/CC0
+inputs. It also contains the BSD 3-Clause notice for the colour-science
+projector spectrum. Those notices travel with the built app.
+
+Fotufilm stock profiles — CC BY-SA 4.0
+Copyright 2026 MUAStudio Inc. Credit Fotufilm (https://fotufilm.com).
+The 30 upstream JSON stocks and the 20 adapted HSpec profiles are a separately
+licensed data collection. Keep the license, source attribution and adaptation
+history with copies. See ProfileSources/Fotufilm/NOTICE.md and
+Hibiscus Film/FilmProfiles.bundle/Fotufilm/LICENSE.txt. These terms govern the
+profile data. Fotufilm claims no license rights over photographs rendered
+with those profiles solely because the profiles were used.
 
 Film Frame includes Inter (Google Fonts distribution, https://fonts.google.com/specimen/Inter) and JetBrains Mono 2.304 (https://github.com/JetBrains/JetBrainsMono/tree/v2.304). Their copyright and SIL Open Font License 1.1 texts are in Hibiscus Film/FilmFrameFonts.bundle.
+
+Hibiscus Originals and artwork
+Hibiscus Originals recipe metadata identifies CC BY-SA 4.0. Its design
+notes still describe that license as a proposal. Confirm the intended data
+grant for release. The app icon and other Hibiscus branding are project
+assets. The three StyleBody, StyleBounce and StyleGlaze stock-icon layers
+are copied from Hibiscus Matrix. The source checkout reviewed for those
+three PNGs has no explicit asset license. Confirm redistribution permission
+for those layers before publishing them. SpektraLab is a design reference
+for Film Frame (https://spektralab.app/user_guide/).
+
+Release distribution
+For executable redistribution, tell recipients how to obtain the
+corresponding MPL-covered source. Keep the CC BY-SA profiles and their
+notices available under their own terms. Check the selected store EULA and
+delivery restrictions against those profile rights before a store release.
