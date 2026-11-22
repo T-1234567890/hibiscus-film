@@ -66,6 +66,12 @@ Import a photograph or Live Photo and choose an effect, then adjust its intensit
 
 The Hibiscus Print Engine handles Effects. Fotufilm handles camera film simulation and recipe previews.
 
+## Creative Pack and community support
+
+Hibiscus Film’s open-source code includes **Hibiscus Creative Pack**. In the official App Store build, the $4.99 USD one-time purchase helps sustain the project and unlocks Recipe Kitchen and exports for seven premium Effects. The camera is free. **Support Hibiscus** is a separate way to contribute voluntarily.
+
+Creative Pack is locked until a purchase is verified, including in self-built copies. To remove the paywall from your own build, edit the source before building.
+
 ## Export
 
 - **Photo Only** saves or shares the developed photograph. Supported Live Photo captures retain their motion.

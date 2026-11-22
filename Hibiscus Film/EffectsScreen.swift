@@ -4,6 +4,7 @@ import PhotosUI
 import SwiftUI
 
 struct EffectsScreen: View {
+    @Binding var previewPhoto: CGImage?
     @State private var photo: EffectPhoto?
     @State private var item: PhotosPickerItem?
     @State private var choosing = false
@@ -12,7 +13,10 @@ struct EffectsScreen: View {
     var body: some View {
         Group {
             if let photo {
-                EffectProof(photo: photo, importing: item != nil, choose: { choosing = true }, exit: { self.photo = nil })
+                EffectProof(photo: photo, importing: item != nil, choose: { choosing = true }, exit: {
+                    self.photo = nil
+                    previewPhoto = nil
+                })
                     .id(photo.id)
             } else {
                 Button { choosing = true } label: {
@@ -40,6 +44,7 @@ struct EffectsScreen: View {
                 let replacement = try await EffectPhoto.load(item, preservingMotion: true)
                 try Task.checkCancellation()
                 photo = replacement
+                previewPhoto = replacement.preview.cgImage
             } catch {
                 guard !Task.isCancelled else { return }
                 importFailed = true
@@ -51,11 +56,13 @@ struct EffectsScreen: View {
 }
 
 private struct EffectProof: View {
+    @Environment(AppPurchases.self) private var purchases
     let photo: EffectPhoto
     let importing: Bool
     let choose: () -> Void
     let exit: () -> Void
     @State private var confirmingExit = false
+    @State private var showCreativePack = false
 
     private static let engine = HibiscusPrintEngine()
     @State private var effect = PrintEffect.newsprint
@@ -99,6 +106,10 @@ private struct EffectProof: View {
         Binding(get: { strengths[effect, default: 1] }, set: { strengths[effect] = $0 })
     }
 
+    private func isLocked(_ effect: PrintEffect) -> Bool {
+        effect.requiresCreativePack && !purchases.canUseCreativePack
+    }
+
     var body: some View {
         VStack(spacing: 8) {
             HStack {
@@ -131,20 +142,10 @@ private struct EffectProof: View {
                     .accessibilityLabel("Play Live Photo")
                     .disabled(export != nil || importing || plateKey != recipe)
                 }
-                Menu {
-                    Button { export = .save } label: {
-                        Label(photo.motion != nil ? "Save Live Photo" : "Save Photo", systemImage: "square.and.arrow.down")
-                    }
-                    Button { export = .share } label: { Label("Share", systemImage: "square.and.arrow.up") }
-                } label: {
-                    Image(systemName: "square.and.arrow.up")
-                        .frame(width: 44, height: 44)
-                        .hibiscusGlass(interactive: true, in: Circle())
-                }
-                .buttonStyle(.plain)
-                .menuOrder(.fixed)
-                .accessibilityLabel("Export effect")
-                .disabled(plateKey != recipe || export != nil || importing)
+                exportControl
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Export effect")
+                    .disabled((plateKey != recipe && !isLocked(effect)) || export != nil || importing)
             }
             .font(.subheadline.weight(.semibold))
             .padding(.horizontal, 16)
@@ -196,6 +197,9 @@ private struct EffectProof: View {
             playingLive = false
             renderedLive = nil
         }
+        .sheet(isPresented: $showCreativePack) {
+            CreativePackPaywall(photo: photo.preview.cgImage)
+        }
         .sheet(item: $file, onDismiss: { sharedLivePhoto = nil }) { item in
             PhotoShareSheet(file: item, livePhoto: sharedLivePhoto) { _, error in
                 if error != nil { message = LanguageManager.text("This photo could not be shared.") }
@@ -216,6 +220,34 @@ private struct EffectProof: View {
 
     private var currentRender: Recipe {
         Recipe(effect: effect, inks: recipe.inks, fill: strength.wrappedValue)
+    }
+
+    @ViewBuilder
+    private var exportControl: some View {
+        if isLocked(effect) {
+            Button {
+                showCreativePack = true
+            } label: {
+                exportSymbol
+            }
+            .accessibilityHint("Requires Creative Pack")
+        } else {
+            Menu {
+                Button { export = .save } label: {
+                    Label(photo.motion != nil ? "Save Live Photo" : "Save Photo", systemImage: "square.and.arrow.down")
+                }
+                Button { export = .share } label: { Label("Share", systemImage: "square.and.arrow.up") }
+            } label: {
+                exportSymbol
+            }
+            .menuOrder(.fixed)
+        }
+    }
+
+    private var exportSymbol: some View {
+        Image(systemName: "square.and.arrow.up")
+            .frame(width: 44, height: 44)
+            .hibiscusGlass(interactive: true, in: Circle())
     }
 
     private var photograph: some View {
@@ -240,11 +272,15 @@ private struct EffectProof: View {
         .overlay {
             if visiblePlate == nil { ProgressView().accessibilityLabel("Rendering effect") }
         }
+        .overlay(alignment: .topTrailing) {
+            if isLocked(effect) { EffectLockMark(size: 26).padding(8) }
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .contentShape(Rectangle())
         .onTapGesture { if export == nil && !importing && !playingLive { choose() } }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(Text(LocalizedStringKey(effect.rawValue))) photograph")
+        .accessibilityValue(isLocked(effect) ? Text("Requires Creative Pack") : Text(verbatim: ""))
         .accessibilityHint("Tap to replace the photo")
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { if export == nil && !importing && !playingLive { choose() } }
@@ -254,12 +290,19 @@ private struct EffectProof: View {
         VStack(spacing: 10) {
             PaperCarousel(finishes: PrintEffect.allCases, thumbnails: samples.mapValues(\.image),
                 name: { $0.rawValue }, label: "Effect", fallback: photo.preview,
+                isLocked: isLocked,
                 selection: Binding(get: { PrintEffect.allCases.firstIndex(of: effect) ?? 0 },
                                    set: { effect = PrintEffect.allCases[$0] }))
                 .frame(height: 128)
             Menu {
                 Picker("Effect", selection: $effect) {
-                    ForEach(PrintEffect.allCases) { Text(LocalizedStringKey($0.rawValue)).tag($0) }
+                    ForEach(PrintEffect.allCases) { style in
+                        if isLocked(style) {
+                            Label(LocalizedStringKey(style.rawValue), systemImage: "lock").tag(style)
+                        } else {
+                            Text(LocalizedStringKey(style.rawValue)).tag(style)
+                        }
+                    }
                 }
             } label: { Text(LocalizedStringKey(effect.rawValue)).font(.headline).frame(minHeight: 44) }
             .padding(.top, -12)
@@ -335,6 +378,7 @@ private struct EffectProof: View {
         let selected = currentRender
         let intensity = selected.fill
         defer { export = nil }
+        guard destination == .play || checkExportAccess(for: selected.effect) else { return }
         do {
             if destination == .save {
                 let permission = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
@@ -343,6 +387,7 @@ private struct EffectProof: View {
                     message = LanguageManager.text("Allow photo access in Settings to save this photo.")
                     return
                 }
+                guard checkExportAccess(for: selected.effect) else { return }
             }
             if photo.motion != nil {
                 let result: EffectLivePhoto
@@ -354,6 +399,7 @@ private struct EffectProof: View {
                     try Task.checkCancellation()
                     renderedLive = (selected, result)
                 }
+                guard destination == .play || checkExportAccess(for: selected.effect) else { return }
                 switch destination {
                 case .play: playingLive = true
                 case .share: sharedLivePhoto = result.preview; file = result.file
@@ -371,6 +417,7 @@ private struct EffectProof: View {
             let item = try PhotoExportFile.temporary(filename: "Hibiscus-\(selected.effect.rawValue).png")
             try await Self.engine.export(photo.data, effect: selected.effect, inks: selected.inks, intensity: intensity, to: item.url)
             try Task.checkCancellation()
+            guard checkExportAccess(for: selected.effect) else { return }
             if destination == .share {
                 file = item
             } else {
@@ -385,6 +432,12 @@ private struct EffectProof: View {
                     : LanguageManager.text("This photo could not be exported.")
             }
         }
+    }
+
+    private func checkExportAccess(for effect: PrintEffect) -> Bool {
+        guard isLocked(effect) else { return true }
+        showCreativePack = true
+        return false
     }
 }
 

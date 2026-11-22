@@ -22,6 +22,13 @@ nonisolated enum PrintEffect: String, CaseIterable, Identifiable {
 
     var id: Self { self }
 
+    var requiresCreativePack: Bool {
+        switch self {
+        case .photocopy, .risograph, .fiber, .ascii, .engraving, .solarized, .chromaticDrift: true
+        case .newsprint, .magazine, .duotone, .warm, .cyanotype, .archive, .fade, .halftone: false
+        }
+    }
+
     var palettes: [PrintPalette] {
         switch self {
         case .ascii: [.photoColors, .carbonIvory, .phosphor, .indigoGold, .blueApricot, .oxbloodRose, .violetMint, .bluePink]

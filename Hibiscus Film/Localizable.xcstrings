@@ -4,6 +4,16 @@
     "" : {
 
     },
+    "%@ · One-time purchase · No subscription" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · 一次性购买 · 无需订阅"
+          }
+        }
+      }
+    },
     "%@ %lld, %@ %lld" : {
       "localizations" : {
         "zh-Hans" : {
@@ -41,6 +51,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 习作"
+          }
+        }
+      }
+    },
+    "%@, requires Creative Pack" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@，需要创意套装"
           }
         }
       }
@@ -107,6 +127,16 @@
         }
       }
     },
+    "A Biscuit" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一块饼干"
+          }
+        }
+      }
+    },
     "A camera isn’t available on this device." : {
       "localizations" : {
         "zh-Hans" : {
@@ -124,6 +154,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "超广角相机不支持全分辨率拍照。"
+          }
+        }
+      }
+    },
+    "A Matcha Latte" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一杯抹茶拿铁"
+          }
+        }
+      }
+    },
+    "A Tea" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一杯茶"
           }
         }
       }
@@ -470,6 +520,16 @@
         }
       }
     },
+    "Build from scratch or start from a film stock. Edit response and color curves, grain, and halation with a live Fotufilm preview. Save your recipes and export them as .hspec files." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从空白配方开始，或选用现有胶片。编辑响应曲线、色彩曲线、颗粒与晕光，并使用 Fotufilm 实时预览。保存配方并导出为 .hspec 文件。"
+          }
+        }
+      }
+    },
     "Building midtones" : {
       "localizations" : {
         "zh-Hans" : {
@@ -643,6 +703,16 @@
         }
       }
     },
+    "Close" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
+        }
+      }
+    },
     "Cobalt / pink" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -715,6 +785,26 @@
         }
       }
     },
+    "Contributions are currently unavailable." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂时无法赞助。"
+          }
+        }
+      }
+    },
+    "Contributions do not unlock features." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助不会解锁功能。"
+          }
+        }
+      }
+    },
     "Couldn’t capture this Live Photo." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -776,6 +866,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "知识共享 署名—相同方式共享 4.0"
+          }
+        }
+      }
+    },
+    "Creative Pack is currently unavailable." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创意套装暂时无法购买。"
+          }
+        }
+      }
+    },
+    "Creative Pack is open source. The one-time App Store purchase helps sustain development of Hibiscus Film." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创意套装是开源的。App Store 的一次性购买有助于支持 Hibiscus Film 的持续开发。"
+          }
+        }
+      }
+    },
+    "Creative Pack unlocked" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创意套装已解锁"
           }
         }
       }
@@ -997,16 +1117,6 @@
         }
       }
     },
-    "Email the developer." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "给开发者发送邮件。"
-          }
-        }
-      }
-    },
     "English" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1105,6 +1215,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "探索 1234567890.dev 的更多作品"
+          }
+        }
+      }
+    },
+    "Explore your own film recipes, experiment with advanced photographic effects, and develop your own visual style." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "探索自己的胶片配方，尝试更多摄影效果，逐步形成独特的视觉风格。"
           }
         }
       }
@@ -1335,6 +1455,16 @@
         }
       }
     },
+    "Future Hibiscus products, services, or commercial features may be offered under separate terms, including proprietary licenses." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未来推出的 Hibiscus 产品、服务或商业功能可能采用独立条款，包括专有许可证。"
+          }
+        }
+      }
+    },
     "General" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1447,6 +1577,36 @@
         }
       }
     },
+    "Help Keep Hibiscus Alive." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "让 Hibiscus 继续成长。"
+          }
+        }
+      }
+    },
+    "Help keep independent development going." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "助力独立开发持续进行。"
+          }
+        }
+      }
+    },
+    "Hibiscus Creative Pack" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hibiscus 创意套装"
+          }
+        }
+      }
+    },
     "Hibiscus Film" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1484,6 +1644,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hibiscus Film 使用制造商和胶片名称，仅用于标识各配置所模拟的感光材料。所有商标均归各自权利人所有。提及这些名称并不代表本应用与制造商有关联，也不代表本应用获得其赞助或认可。"
+          }
+        }
+      }
+    },
+    "Hibiscus Film, including Creative Pack, is open source and supported by its community. Your support helps fund bug fixes, compatibility updates, and new features." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hibiscus Film（包括创意套装）是由社区支持的开源项目。你的赞助将用于修复问题、更新兼容性和开发新功能。"
           }
         }
       }
@@ -1720,6 +1890,16 @@
         }
       }
     },
+    "iPhone camera and color grading." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone 拍摄与调色应用。"
+          }
+        }
+      }
+    },
     "JetBrains Mono font license" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1766,6 +1946,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "语言"
+          }
+        }
+      }
+    },
+    "Large Tip" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大额赞赏"
           }
         }
       }
@@ -1852,6 +2043,16 @@
         }
       }
     },
+    "Loading contributions…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在加载赞助选项…"
+          }
+        }
+      }
+    },
     "Loading Live Photo…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1878,6 +2079,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在载入照片…"
+          }
+        }
+      }
+    },
+    "Loading price…" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在加载价格…"
+          }
+        }
+      }
+    },
+    "Loading tips…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在加载赞赏选项…"
           }
         }
       }
@@ -1920,6 +2142,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最高"
+          }
+        }
+      }
+    },
+    "Medium Tip" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中额赞赏"
           }
         }
       }
@@ -1978,6 +2211,16 @@
         }
       }
     },
+    "More room to create." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "给创作更多空间。"
+          }
+        }
+      }
+    },
     "Mozilla Public License 2.0" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2017,6 +2260,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新闻纸"
+          }
+        }
+      }
+    },
+    "No Creative Pack purchase was found for this Apple Account." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 Apple 账户没有创意套装购买记录。"
           }
         }
       }
@@ -2071,12 +2324,32 @@
         }
       }
     },
+    "One-time contributions" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一次性赞助"
+          }
+        }
+      }
+    },
     "Open Chroma Index" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open Chroma Index"
+          }
+        }
+      }
+    },
+    "Open Saved Recipe" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开已保存配方"
           }
         }
       }
@@ -2118,6 +2391,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导出时会保留可选扩展数据。"
+          }
+        }
+      }
+    },
+    "Original Hibiscus on GitHub" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 GitHub 上查看原版 Hibiscus"
           }
         }
       }
@@ -2424,6 +2707,16 @@
         }
       }
     },
+    "Recipe Kitchen and seven premium Effects" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "配方工坊与七种高级效果"
+          }
+        }
+      }
+    },
     "Recipe name" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2495,6 +2788,16 @@
         }
       }
     },
+    "Requires Creative Pack" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要创意套装"
+          }
+        }
+      }
+    },
     "Reset pad" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2531,6 +2834,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "响应"
+          }
+        }
+      }
+    },
+    "Restore Purchases" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢复购买"
           }
         }
       }
@@ -2573,6 +2886,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "保存"
+          }
+        }
+      }
+    },
+    "Save and share Photocopy, Risograph, Fiber Print, ASCII, Engraving, Solarization, and Chromatic Drift." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存和分享应用了影印、孔版印刷、纤维相纸、ASCII、雕刻、日晒反转和色彩漂移效果的照片。"
           }
         }
       }
@@ -2723,6 +3046,16 @@
         }
       }
     },
+    "Saved Recipes" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已保存配方"
+          }
+        }
+      }
+    },
     "Saved to Photos" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2795,16 +3128,6 @@
         }
       }
     },
-    "Send Feedback" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "发送反馈"
-          }
-        }
-      }
-    },
     "Sensitivity" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2843,6 +3166,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在稳定高光"
+          }
+        }
+      }
+    },
+    "Seven premium Effects" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "七种高级效果"
           }
         }
       }
@@ -2899,6 +3232,17 @@
         }
       }
     },
+    "Small Tip" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小额赞赏"
+          }
+        }
+      }
+    },
     "Solarization" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2906,6 +3250,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "中途曝光"
+          }
+        }
+      }
+    },
+    "Some tip options are currently unavailable." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "部分赞赏选项暂不可用。"
           }
         }
       }
@@ -2961,6 +3316,16 @@
         }
       }
     },
+    "Support Hibiscus" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助 Hibiscus"
+          }
+        }
+      }
+    },
     "Support open digital color." : {
       "localizations" : {
         "zh-Hans" : {
@@ -2972,6 +3337,7 @@
       }
     },
     "Support the Project" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -3021,6 +3387,16 @@
         }
       }
     },
+    "Thank you for your support." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "感谢你的赞助。"
+          }
+        }
+      }
+    },
     "The camera could not switch shooting modes." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3028,6 +3404,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "相机无法切换拍摄模式。"
+          }
+        }
+      }
+    },
+    "The Creative Pack purchase could not be verified." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法验证创意套装的购买。"
+          }
+        }
+      }
+    },
+    "The Creative Pack request could not be completed. Please try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法完成创意套装请求，请重试。"
           }
         }
       }
@@ -3072,6 +3468,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法生成所选胶片的预览。"
+          }
+        }
+      }
+    },
+    "These are symbolic contributions to support Hibiscus development. No actual food, drinks, or physical goods will be purchased or provided in exchange for your contribution." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这些款项是用于支持 Hibiscus 开发的象征性赞助。赞助不会购买任何实际的食品、饮品或实物，也不会收到这些物品。"
           }
         }
       }
@@ -3172,6 +3578,39 @@
         }
       }
     },
+    "This tip could not be completed." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法完成这笔赞赏。"
+          }
+        }
+      }
+    },
+    "This tip could not be verified." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法验证这笔赞赏。"
+          }
+        }
+      }
+    },
+    "This tip is pending approval." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "这笔赞赏正在等待批准。"
+          }
+        }
+      }
+    },
     "Timer" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3179,6 +3618,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "定时器"
+          }
+        }
+      }
+    },
+    "Tip" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞赏"
+          }
+        }
+      }
+    },
+    "Tips are currently unavailable." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞赏暂不可用。"
           }
         }
       }
@@ -3250,6 +3711,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "撤销"
+          }
+        }
+      }
+    },
+    "Unlock Creative Pack" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解锁创意套装"
           }
         }
       }
@@ -3376,6 +3847,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不带胶片边框"
+          }
+        }
+      }
+    },
+    "Your contribution could not be completed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未能完成赞助。"
+          }
+        }
+      }
+    },
+    "Your contribution could not be verified." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法验证这笔赞助。"
+          }
+        }
+      }
+    },
+    "Your contribution is pending approval." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助正在等待批准。"
+          }
+        }
+      }
+    },
+    "Your purchase is pending approval. Creative Pack will unlock once it’s approved." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "购买正在等待批准。批准后，创意套装将自动解锁。"
           }
         }
       }

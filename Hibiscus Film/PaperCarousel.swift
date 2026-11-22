@@ -6,9 +6,23 @@ struct PaperCarousel<Item: Hashable>: View {
     let name: (Item) -> String
     let label: LocalizedStringKey
     let fallback: UIImage
+    let isLocked: (Item) -> Bool
     @Binding var selection: Int
+    var automaticallyAdvances = false
     @State private var displacement: CGFloat = 0
+    @GestureState private var isDragging = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
+
+    private struct Rotation: Equatable {
+        let selection: Int
+        let enabled: Bool
+    }
+
+    private var rotation: Rotation {
+        Rotation(selection: selection, enabled: automaticallyAdvances && finishes.count > 1
+                 && !reduceMotion && !voiceOver && !isDragging)
+    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -33,6 +47,9 @@ struct PaperCarousel<Item: Hashable>: View {
                     .frame(width: side, height: side)
                     .clipShape(shape)
                     .overlay { shape.strokeBorder(.white.opacity(0.16), lineWidth: 0.75) }
+                    .overlay(alignment: .topTrailing) {
+                        if isLocked(finishes[index]) { EffectLockMark(size: 20).padding(5) }
+                    }
                     .contentShape(shape)
                     .shadow(color: .black.opacity(0.35), radius: 4, y: 3)
                     .scaleEffect(0.72 + 0.28 * prominence)
@@ -47,6 +64,7 @@ struct PaperCarousel<Item: Hashable>: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .contentShape(Rectangle())
             .gesture(DragGesture(minimumDistance: 0)
+                .updating($isDragging) { _, dragging, _ in dragging = true }
                 .onChanged { drag in displacement = max(-1, min(1, drag.translation.width / stride)) }
                 .onEnded { drag in
                     let movement = drag.predictedEndTranslation.width / stride
@@ -63,9 +81,16 @@ struct PaperCarousel<Item: Hashable>: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(label)
-        .accessibilityValue(Text(LocalizedStringKey(name(finishes[selection]))))
+        .accessibilityValue(isLocked(finishes[selection])
+            ? Text("\(Text(LocalizedStringKey(name(finishes[selection])))), requires Creative Pack")
+            : Text(LocalizedStringKey(name(finishes[selection]))))
         .accessibilityAdjustableAction { settle(on: wrapped(selection + ($0 == .increment ? 1 : -1))) }
-        .sensoryFeedback(.selection, trigger: selection)
+        .sensoryFeedback(.selection, trigger: selection) { _, _ in !automaticallyAdvances }
+        .task(id: rotation) {
+            guard rotation.enabled else { return }
+            do { try await Task.sleep(for: .seconds(4)) } catch { return }
+            settle(on: wrapped(selection + 1))
+        }
     }
 
     private func wrapped(_ index: Int) -> Int { (index + finishes.count) % finishes.count }
@@ -80,5 +105,19 @@ struct PaperCarousel<Item: Hashable>: View {
             selection = index
             displacement = 0
         }
+    }
+}
+
+struct EffectLockMark: View {
+    let size: CGFloat
+
+    var body: some View {
+        Image(systemName: "lock.fill")
+            .font(.system(size: size * 0.43, weight: .semibold))
+            .foregroundStyle(.white)
+            .frame(width: size, height: size)
+            .background(.black.opacity(0.64), in: Circle())
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 }

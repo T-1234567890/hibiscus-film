@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var cameraAttempt = 0
     @State private var navigationShutter: CGRect?
     @State private var tab = FilmTab.camera
+    @State private var effectsPhoto: CGImage?
     @State private var session = FilmSession()
     @StateObject private var remoteContent = RemoteContentManager()
     @StateObject private var discovery = DiscoveryPreferences()
@@ -34,10 +35,10 @@ struct ContentView: View {
                     }
                 }
                 Tab(languageManager.string("Effects"), systemImage: "square.stack.3d.up", value: FilmTab.effects) {
-                    NavigationStack { CreateScreen() }
+                    NavigationStack { CreateScreen(previewPhoto: $effectsPhoto) }
                 }
                 Tab(languageManager.string("Settings"), systemImage: "gearshape", value: FilmTab.settings) {
-                    NavigationStack { SettingsScreen() }
+                    NavigationStack { SettingsScreen(effectsPhoto: effectsPhoto) }
                 }
             }
             .overlay(alignment: .topLeading) {

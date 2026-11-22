@@ -1,0 +1,97 @@
+{
+  "identifier" : "6530E0CA-6B10-4CB2-9EE1-DE854019A684",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "AC6B85BB-F2B3-447A-9B27-2E8333F7C490",
+      "localizations" : [
+        {
+          "description" : "Unlock Recipe Kitchen and exports for seven premium Effects.",
+          "displayName" : "Hibiscus Creative Pack",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "解锁配方工坊和七种高级效果的导出功能。",
+          "displayName" : "Hibiscus 创意套装",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "hibiscus.creativepack.unlock",
+      "referenceName" : "Hibiscus Creative Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "7F324E06-F1B4-45D3-99A4-7A3D17C03483",
+      "localizations" : [
+        {
+          "description" : "A symbolic contribution to Hibiscus development.",
+          "displayName" : "A Biscuit",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "支持 Hibiscus 开发的象征性赞助。",
+          "displayName" : "一块饼干",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "hibiscus.tip.biscuit",
+      "referenceName" : "A Biscuit",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "A8DDAC00-4CD9-44E2-B937-60901E6807EB",
+      "localizations" : [
+        {
+          "description" : "A symbolic contribution to Hibiscus development.",
+          "displayName" : "A Tea",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "支持 Hibiscus 开发的象征性赞助。",
+          "displayName" : "一杯茶",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "hibiscus.tip.tea",
+      "referenceName" : "A Tea",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "5.99",
+      "familyShareable" : false,
+      "internalID" : "79C8F3A5-1DD8-4682-98DB-872B1C23BC65",
+      "localizations" : [
+        {
+          "description" : "A symbolic contribution to Hibiscus development.",
+          "displayName" : "A Matcha Latte",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "支持 Hibiscus 开发的象征性赞助。",
+          "displayName" : "一杯抹茶拿铁",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "hibiscus.tip.matcha",
+      "referenceName" : "A Matcha Latte",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

@@ -42,7 +42,9 @@ nonisolated struct EffectPhoto: Hashable {
 }
 
 struct CreateScreen: View {
-    var body: some View { EffectsScreen().toolbar(.hidden, for: .navigationBar) }
+    @Binding var previewPhoto: CGImage?
+
+    var body: some View { EffectsScreen(previewPhoto: $previewPhoto).toolbar(.hidden, for: .navigationBar) }
 }
 
 struct ChoosePhotoPrompt: View {

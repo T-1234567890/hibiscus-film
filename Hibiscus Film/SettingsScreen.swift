@@ -2,6 +2,7 @@ import Photos
 import SwiftUI
 
 struct SettingsScreen: View {
+    let effectsPhoto: CGImage?
     @Environment(\.openURL) private var openURL
     @EnvironmentObject private var discovery: DiscoveryPreferences
     @EnvironmentObject private var remoteContent: RemoteContentManager
@@ -16,13 +17,23 @@ struct SettingsScreen: View {
     @AppStorage(CameraAutoSaveFormat.preferenceKey) private var autoSaveFormat = CameraAutoSaveFormat.photo
     @State private var requestingPhotoAccess = false
     @State private var showPhotoPermissionAlert = false
+    @State private var showingSupport = false
+    @State private var showingCreativePack = false
     var body: some View {
         @Bindable var session = session
         Form {
-            Section("Support the Project") {
-                externalRow("Hibiscus Film on GitHub", "Star the project or contribute.", HibiscusLinks.repository)
-                externalRow("Open Chroma Index", "Support open digital color.", HibiscusLinks.openChromaIndex)
-                externalRow("Send Feedback", "Email the developer.", HibiscusLinks.support)
+            Section {
+                Button {
+                    showingSupport = true
+                } label: {
+                    SettingsRow(title: "Support Hibiscus", subtitle: "Help keep independent development going.")
+                }
+
+                Button {
+                    showingCreativePack = true
+                } label: {
+                    SettingsRow(title: "Hibiscus Creative Pack", subtitle: "Recipe Kitchen and seven premium Effects")
+                }
             }
 
             Section("General") {
@@ -93,7 +104,7 @@ struct SettingsScreen: View {
                 }
             }
 
-            HSpecSettingsSection()
+            HSpecSettingsSection(effectsPhoto: effectsPhoto)
 
             Section("More Apps") {
                 Toggle(isOn: $discovery.enabled) {
@@ -152,6 +163,9 @@ struct SettingsScreen: View {
                 .padding(.vertical, 3)
                 .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
 
+                externalRow("Hibiscus Film on GitHub", "Star the project or contribute.", HibiscusLinks.repository)
+                externalRow("Original Hibiscus on GitHub", "iPhone camera and color grading.", HibiscusLinks.originalRepository)
+                externalRow("Open Chroma Index", "Support open digital color.", HibiscusLinks.openChromaIndex)
                 externalRow("Privacy", "View Privacy Policy", HibiscusLinks.privacy)
                 externalRow("Terms of Service", "View Terms of Service", HibiscusLinks.terms)
                 NavigationLink {
@@ -162,6 +176,8 @@ struct SettingsScreen: View {
             }
         }
         .task { remoteContent.refreshInBackground() }
+        .sheet(isPresented: $showingSupport) { SupportHibiscus() }
+        .sheet(isPresented: $showingCreativePack) { CreativePackPaywall(photo: effectsPhoto) }
         .onAppear { refreshPhotoPermission() }
         .onChange(of: scenePhase) {
             if scenePhase == .active { refreshPhotoPermission() }

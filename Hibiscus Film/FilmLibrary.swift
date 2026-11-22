@@ -211,6 +211,8 @@ private extension Stock {
 }
 
 struct HSpecSettingsSection: View {
+    let effectsPhoto: CGImage?
+    @Environment(AppPurchases.self) private var purchases
     @Environment(FilmSession.self) private var film
     @State private var importing = false
     @State private var choosingProfile = false
@@ -237,7 +239,13 @@ struct HSpecSettingsSection: View {
                 .sheet(isPresented: $choosingProfile) { FilmLibrary(choosingForExport: true) }
 
             Button("Recipe Kitchen") { newProfile = true }
-                .sheet(isPresented: $newProfile) { RecipeKitchen() }
+                .sheet(isPresented: $newProfile) {
+                    if purchases.canUseCreativePack {
+                        RecipeKitchen()
+                    } else {
+                        CreativePackPaywall(photo: effectsPhoto)
+                    }
+                }
         } header: {
             Text("HSpec Compatibility")
         } footer: {

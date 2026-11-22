@@ -11,6 +11,7 @@ import SwiftUI
 struct Hibiscus_FilmApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @StateObject private var languageManager = LanguageManager.shared
+    @State private var purchases = AppPurchases()
 
     init() {
         UserDefaults.standard.register(defaults: [CameraService.autoSaveKey: CameraService.defaultAutoSave])
@@ -21,6 +22,8 @@ struct Hibiscus_FilmApp: App {
             ContentView()
                 .environmentObject(languageManager)
                 .environment(\.locale, languageManager.locale)
+                .environment(purchases)
+                .task { await purchases.observeTransactions() }
                 .onChange(of: scenePhase) { _, phase in
                     if phase == .active { languageManager.refreshSystemLanguage() }
                 }

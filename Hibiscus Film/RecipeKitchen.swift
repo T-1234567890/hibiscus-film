@@ -26,6 +26,14 @@ struct RecipeKitchen: View {
     @State private var document: HSpecFileDocument?
     nonisolated private static let context = CIContext()
 
+    private var savedRecipes: [Stock] {
+        film.custom.filter { stock in
+            guard let id = stock.recipe.fotufilmID else { return false }
+            return KitchenRecipe.url(id) != nil
+        }
+        .sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+    }
+
     var body: some View {
         NavigationStack {
             Group {
@@ -57,7 +65,7 @@ struct RecipeKitchen: View {
                         }
                         .padding(20)
                     }
-                } else {
+                } else if savedRecipes.isEmpty {
                     Button { addingRecipe = true } label: {
                         VStack(spacing: 16) {
                             Image(systemName: "plus.circle").font(.largeTitle).accessibilityHidden(true)
@@ -67,6 +75,15 @@ struct RecipeKitchen: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
+                } else {
+                    List {
+                        Button("Add Recipe", systemImage: "plus") { addingRecipe = true }
+                        Section("Saved Recipes") {
+                            ForEach(savedRecipes) { stock in
+                                Button(stock.name) { load(from: stock) }
+                            }
+                        }
+                    }
                 }
             }
             .navigationTitle("Recipe Kitchen")
@@ -77,6 +94,13 @@ struct RecipeKitchen: View {
                     ToolbarItem(placement: .topBarTrailing) {
                         Menu {
                             Button("Add Recipe", systemImage: "plus") { addingRecipe = true }
+                            if !savedRecipes.isEmpty {
+                                Menu("Open Saved Recipe", systemImage: "folder") {
+                                    ForEach(savedRecipes) { stock in
+                                        Button(stock.name) { load(from: stock) }
+                                    }
+                                }
+                            }
                             Button("Undo", systemImage: "arrow.uturn.backward") {
                                 if let previous = undo.popLast() { draft = previous; revision += 1 }
                             }.disabled(undo.isEmpty)
