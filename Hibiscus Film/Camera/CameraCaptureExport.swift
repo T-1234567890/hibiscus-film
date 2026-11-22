@@ -9,8 +9,8 @@ nonisolated enum CameraExportVariant: String, CaseIterable, Identifiable, Sendab
 
     func title(livePhoto: Bool) -> LocalizedStringKey {
         switch self {
-        case .photo: "Photo Only"
-        case .filmFrame: livePhoto ? "With Film Frame (Still)" : "With Film Frame"
+        case .photo: livePhoto ? "Without Film Frame" : "Photo Only"
+        case .filmFrame: "With Film Frame"
         }
     }
 }
@@ -47,6 +47,28 @@ nonisolated struct CameraCaptureExport: Sendable {
     let captureISO: Int?
 
     private static let context = CIContext(options: [.cacheIntermediates: false])
+    private static let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
+
+    @concurrent func framedLivePhoto(from source: ProcessedLivePhoto) async throws -> ProcessedLivePhoto {
+        defer { withExtendedLifetime(source) {} }
+        try Task.checkCancellation()
+        let file = try PhotoExportFile.temporary(filename: "Hibiscus-Film-Frame.heic")
+        let movie = file.url.deletingPathExtension().appendingPathExtension("mov")
+        let original = try Data(contentsOf: source.stillURL, options: .mappedIfSafe)
+        let identifier = UUID().uuidString
+        guard let frame = FilmFrame.prepare(photo, stock: stock, isHPan: isHPan, recipeAccent: recipeAccent,
+                                            frameIndex: frameIndex, captureISO: captureISO),
+              let image = frame.render(CIImage(cgImage: photo)),
+              let still = Self.context.createCGImage(image, from: image.extent, format: .RGBA8, colorSpace: Self.colorSpace),
+              LivePhotoProcessor.writePairedStill(still, original: original, identifier: identifier, to: file.url),
+              await LivePhotoProcessor.renderFramedMotion(source.motionURL, to: movie, context: Self.context, frame: frame),
+              let motion = await LivePhotoProcessor.pairedVideo(motionURL: movie, sourceURL: source.motionURL,
+                                                                identifier: identifier) else {
+            throw CocoaError(.coderInvalidValue)
+        }
+        try Task.checkCancellation()
+        return ProcessedLivePhoto(file: file, motionURL: motion, location: source.location)
+    }
 
     @concurrent func file(for variant: CameraExportVariant) async throws -> PhotoExportFile {
         try Task.checkCancellation()
@@ -67,7 +89,7 @@ nonisolated struct CameraCaptureExport: Sendable {
                 throw CocoaError(.coderInvalidValue)
             }
             try Self.context.writeJPEGRepresentation(of: image, to: file.url,
-                colorSpace: CGColorSpace(name: CGColorSpace.sRGB)!,
+                colorSpace: Self.colorSpace,
                 options: [CIImageRepresentationOption(rawValue: kCGImageDestinationLossyCompressionQuality as String): quality])
         }
         try Task.checkCancellation()

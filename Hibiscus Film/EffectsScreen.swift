@@ -125,7 +125,7 @@ private struct EffectProof: View {
                 if photo.motion != nil {
                     Button { export = .play } label: {
                         Image(systemName: "livephoto").frame(width: 44, height: 44)
-                            .hibiscusGlass(interactive: true, in: Circle())
+                            .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel("Play Live Photo")

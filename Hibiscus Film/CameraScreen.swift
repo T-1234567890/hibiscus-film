@@ -42,7 +42,7 @@ struct CameraScreen: View {
         ZStack(alignment: .top) {
             Color(white: 0.065).ignoresSafeArea()
 
-            if let captured = camera.capturedImage {
+            if let captured = camera.capturedImage, !camera.capturePreviewDismissed {
                 captureResult(captured)
             } else {
                 liveCamera.overlay {
@@ -89,8 +89,8 @@ struct CameraScreen: View {
         .animation(.easeInOut(duration: 0.22), value: camera.statusMessage)
         .tint(.white)
         .observeCameraHinge($hingePose)
-        .task(id: isActive && scenePhase != .background) {
-            if isActive && scenePhase != .background {
+        .task(id: isActive && scenePhase != .background && !camera.capturePreviewDismissed) {
+            if isActive && scenePhase != .background && !camera.capturePreviewDismissed {
                 if camera.capturedImage == nil { startCamera() }
             } else {
                 camera.stop()
@@ -104,6 +104,11 @@ struct CameraScreen: View {
         }
         .task(id: shareVariant) {
             if let shareVariant { await shareCapture(shareVariant) }
+        }
+        .onChange(of: isActive) {
+            guard !isActive else { return }
+            shareVariant = nil
+            shareItem = nil
         }
         .onChange(of: camera.isCapturing) { if camera.isCapturing { capturedStock = film.active } }
         .onChange(of: film.active) { camera.updateProfile(stock: film.active, recipe: film.recipe) }
@@ -379,9 +384,10 @@ struct CameraScreen: View {
                     Image(systemName: !camera.hpanEnabled && camera.selectedMotion == .livePhoto ? "livephoto" : "livephoto.slash")
                 }
             }
-            .frame(width: 18, height: 18)
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
         }
-        .hibiscusGlassButtonStyle()
+        .buttonStyle(.plain)
         .accessibilityLabel(!camera.hpanEnabled && camera.selectedMotion == .livePhoto ? "Live Photo on" : "Live Photo off")
         .disabled(camera.hpanEnabled || camera.changingMode || !camera.isRunning || camera.isConfiguringLivePhoto || camera.selectedFormat == .raw)
         .opacity(camera.selectedFormat == .processed ? 1 : 0.46)
@@ -822,9 +828,11 @@ struct CameraScreen: View {
                                             .padding(10)
                                     } else if !livePlaybackRequested {
                                         Button(action: playCapture) {
-                                            Image(systemName: "livephoto").frame(width: 44, height: 44)
+                                            Image(systemName: "livephoto")
+                                                .frame(width: 44, height: 44)
+                                                .contentShape(Rectangle())
                                         }
-                                        .hibiscusGlassButtonStyle()
+                                        .buttonStyle(.plain)
                                         .accessibilityLabel("Play Live Photo")
                                         .padding(10)
                                     }
@@ -901,12 +909,18 @@ struct CameraScreen: View {
     }
 
     private func shareCapture(_ variant: CameraExportVariant) async {
-        defer { shareVariant = nil }
+        defer {
+            if !Task.isCancelled { shareVariant = nil }
+        }
         guard let image = camera.captureForExport() else { return }
         do {
-            if variant == .photo, let output = camera.capturedLivePhoto {
+            if let output = camera.capturedLivePhoto {
+                let framed = variant == .filmFrame ? try await image.framedLivePhoto(from: output) : nil
                 let live: PHLivePhoto?
-                if let preview = captureLivePhotoPreview {
+                if let framed {
+                    guard let still = UIImage(contentsOfFile: framed.file.url.path) else { throw CocoaError(.fileReadCorruptFile) }
+                    live = await LivePhotoPreviewFactory.make(from: framed, placeholder: still)
+                } else if let preview = captureLivePhotoPreview {
                     live = preview
                 } else if let still = camera.capturedImage {
                     live = await LivePhotoPreviewFactory.make(from: output, placeholder: still)
@@ -915,7 +929,7 @@ struct CameraScreen: View {
                 }
                 try Task.checkCancellation()
                 guard let live else { throw CocoaError(.coderInvalidValue) }
-                shareItem = CameraShareItem(livePhoto: live)
+                shareItem = CameraShareItem(file: (framed ?? output).file, livePhoto: live)
             } else {
                 let file = try await image.file(for: variant)
                 try Task.checkCancellation()

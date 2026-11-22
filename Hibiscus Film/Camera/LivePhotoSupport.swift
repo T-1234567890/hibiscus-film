@@ -10,14 +10,11 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 nonisolated struct ProcessedLivePhoto: @unchecked Sendable {
-    let directoryURL: URL
-    let stillURL: URL
+    let file: PhotoExportFile
     let motionURL: URL
     let location: CLLocation?
 
-    func cleanUp() {
-        try? FileManager.default.removeItem(at: directoryURL)
-    }
+    var stillURL: URL { file.url }
 }
 
 nonisolated enum LivePhotoProcessor {
@@ -31,29 +28,18 @@ nonisolated enum LivePhotoProcessor {
         targetMegapixels: Int,
         location: CLLocation?
     ) async -> ProcessedLivePhoto? {
-        let directory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("HibiscusCameraLivePhotoExports", isDirectory: true)
-            .appendingPathComponent(UUID().uuidString, isDirectory: true)
-        do {
-            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        } catch {
-            return nil
-        }
-        let stillURL = directory.appendingPathComponent("Hibiscus-Camera-Live.heic")
-        let motionURL = directory.appendingPathComponent("Hibiscus-Camera-Live.mov")
+        guard let file = try? PhotoExportFile.temporary(filename: "Hibiscus-Camera-Live.heic") else { return nil }
+        let motionURL = file.url.deletingPathExtension().appendingPathExtension("mov")
         let pairID = UUID().uuidString
         guard renderCameraStill(
             photoData,
-            to: stillURL,
+            to: file.url,
             identifier: pairID,
             character: character,
             adjustment: adjustment,
             aspectRatio: aspectRatio,
             targetMegapixels: targetMegapixels
-        ) else {
-            try? FileManager.default.removeItem(at: directory)
-            return nil
-        }
+        ) else { return nil }
 
         let renderedMotion = await renderCameraMotion(
             sourceMotionURL,
@@ -64,9 +50,8 @@ nonisolated enum LivePhotoProcessor {
         )
         if renderedMotion, let video = await pairedVideo(motionURL: motionURL, sourceURL: sourceMotionURL,
                                                          identifier: pairID, fallbackTime: displayTime) {
-            return ProcessedLivePhoto(directoryURL: directory, stillURL: stillURL, motionURL: video, location: location)
+            return ProcessedLivePhoto(file: file, motionURL: video, location: location)
         }
-        try? FileManager.default.removeItem(at: directory)
         return nil
     }
 
@@ -139,9 +124,27 @@ nonisolated enum LivePhotoProcessor {
         }
     }
 
+    static func renderFramedMotion(_ sourceURL: URL, to destinationURL: URL, context: CIContext,
+                                   frame: FilmFrame.Composition) async -> Bool {
+        let source = AVURLAsset(url: sourceURL)
+        guard let track = try? await source.loadTracks(withMediaType: .video).first,
+              let naturalSize = try? await track.load(.naturalSize),
+              let transform = try? await track.load(.preferredTransform) else { return false }
+        let oriented = naturalSize.applying(transform)
+        let scale = min(abs(oriented.width) / frame.size.width, abs(oriented.height) / frame.size.height)
+        guard scale.isFinite, scale > 0 else { return false }
+        let size = LivePhotoFrameRenderer.encoderSize(CGSize(width: frame.size.width * scale, height: frame.size.height * scale))
+        let motionFrame = frame.scaled(to: size)
+        return await renderMotion(sourceURL, to: destinationURL, context: context, outputSize: size) { image in
+            guard let result = motionFrame.render(image) else { throw CocoaError(.coderInvalidValue) }
+            return result
+        }
+    }
+
     static func renderMotion(
         _ sourceURL: URL, to destinationURL: URL, context: CIContext,
-        portraitAspectRatio: CGFloat? = nil, filter: @escaping @Sendable (CIImage) throws -> CIImage
+        portraitAspectRatio: CGFloat? = nil, outputSize: CGSize? = nil,
+        filter: @escaping @Sendable (CIImage) throws -> CIImage
     ) async -> Bool {
         let asset = AVURLAsset(url: sourceURL)
         guard let export = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality) else {
@@ -155,7 +158,9 @@ nonisolated enum LivePhotoProcessor {
                 request.finish(with: LivePhotoFrameRenderer.output(rendered, renderSize: request.renderSize), context: context)
             } catch { request.finish(with: error) }
         }) else { return false }
-        if let portraitAspectRatio, let track = try? await asset.loadTracks(withMediaType: .video).first,
+        if let outputSize {
+            composition.renderSize = outputSize
+        } else if let portraitAspectRatio, let track = try? await asset.loadTracks(withMediaType: .video).first,
            let naturalSize = try? await track.load(.naturalSize),
            let transform = try? await track.load(.preferredTransform) {
             composition.renderSize = renderSize(for: naturalSize.applying(transform), portraitAspectRatio: portraitAspectRatio)
@@ -189,7 +194,8 @@ nonisolated enum LivePhotoProcessor {
 enum LivePhotoPreviewFactory {
     static func make(from output: ProcessedLivePhoto, placeholder: UIImage,
                      targetSize: CGSize = .zero) async -> PHLivePhoto? {
-        await withCheckedContinuation { continuation in
+        defer { withExtendedLifetime(output) {} }
+        return await withCheckedContinuation { continuation in
             var didFinish = false
             PHLivePhoto.request(
                 withResourceFileURLs: [output.stillURL, output.motionURL],

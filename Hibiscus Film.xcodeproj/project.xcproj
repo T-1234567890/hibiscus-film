@@ -14,7 +14,7 @@
   "packages": [
     {
       "kind": "local",
-      "path": "Vendor/Fotufilm",
+      "path": "Upstream/Fotufilm",
     },
   ],
   "files": [

@@ -997,6 +997,16 @@
         }
       }
     },
+    "Email the developer." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "给开发者发送邮件。"
+          }
+        }
+      }
+    },
     "English" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1220,16 +1230,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "胶片配置署名与改编说明"
-          }
-        }
-      }
-    },
-    "Film. Print. Repeat." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "胶片。印相。再来。"
           }
         }
       }
@@ -1468,6 +1468,16 @@
         }
       }
     },
+    "Hibiscus Film on GitHub" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 GitHub 上查看 Hibiscus Film"
+          }
+        }
+      }
+    },
     "Hibiscus Film uses manufacturer and film stock names only to identify the photographic materials each profile models. All trademarks belong to their respective owners. These references do not imply affiliation with, sponsorship by, or endorsement from the manufacturers." : {
       "localizations" : {
         "zh-Hans" : {
@@ -1485,16 +1495,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hibiscus 原创胶片"
-          }
-        }
-      }
-    },
-    "Hibiscus Project" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hibiscus 项目"
           }
         }
       }
@@ -2278,16 +2278,6 @@
         }
       }
     },
-    "Preview Optional Tip" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "预览自愿打赏"
-          }
-        }
-      }
-    },
     "Privacy" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2347,16 +2337,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "普鲁士蓝／粉笔白"
-          }
-        }
-      }
-    },
-    "Purchases are not connected yet." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "购买功能暂未开放。"
           }
         }
       }
@@ -2815,6 +2795,16 @@
         }
       }
     },
+    "Send Feedback" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发送反馈"
+          }
+        }
+      }
+    },
     "Sensitivity" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2930,6 +2920,16 @@
         }
       }
     },
+    "Star the project or contribute." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为项目加星或参与贡献。"
+          }
+        }
+      }
+    },
     "Street scenes and hard sunlight. Firm shadows, strong midtones, and textured grain." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2961,22 +2961,22 @@
         }
       }
     },
-    "Support" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "支持"
-          }
-        }
-      }
-    },
     "Support open digital color." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "支持开发数字色彩标准"
+          }
+        }
+      }
+    },
+    "Support the Project" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持项目"
           }
         }
       }
@@ -3183,16 +3183,6 @@
         }
       }
     },
-    "Tip preview" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打赏预览"
-          }
-        }
-      }
-    },
     "Tone" : {
       "localizations" : {
         "zh-Hans" : {
@@ -3306,14 +3296,7 @@
       }
     },
     "View Hibiscus on GitHub" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 GitHub 上查看 Hibiscus"
-          }
-        }
-      }
+
     },
     "View Privacy Policy" : {
       "localizations" : {
@@ -3387,12 +3370,12 @@
         }
       }
     },
-    "With Film Frame (Still)" : {
+    "Without Film Frame" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "带胶片边框（静态照片）"
+            "value" : "不带胶片边框"
           }
         }
       }

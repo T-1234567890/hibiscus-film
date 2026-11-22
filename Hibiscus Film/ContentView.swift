@@ -51,6 +51,9 @@ struct ContentView: View {
             .frame(width: space.size.width, height: space.size.height)
         }
         .coordinateSpace(name: CameraWorkspace.navigationSpace)
+        .onChange(of: tab) { previous, selected in
+            if previous == .camera && selected != .camera { camera?.dismissCapturePreview() }
+        }
         .task(id: cameraAttempt) {
             guard camera == nil else { return }
             cameraPreparationFailed = false

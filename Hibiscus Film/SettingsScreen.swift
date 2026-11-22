@@ -7,7 +7,6 @@ struct SettingsScreen: View {
     @EnvironmentObject private var remoteContent: RemoteContentManager
     @Environment(FilmSession.self) private var session
     @EnvironmentObject private var languageManager: LanguageManager
-    @State private var previewTip = false
     @AppStorage(FilmSession.defaultStockPreferenceKey) private var defaultID = Stock.classicDefault.id
     @AppStorage(CaptureFormatOption.preferenceKey) private var captureFormat = CaptureFormatOption.processed
     @AppStorage(CaptureResolution.preferenceKey) private var resolution = CaptureResolution.automatic
@@ -20,13 +19,10 @@ struct SettingsScreen: View {
     var body: some View {
         @Bindable var session = session
         Form {
-            Section("Support") {
-                Button("Preview Optional Tip") { previewTip = true }
-                    .alert("Tip preview", isPresented: $previewTip) {
-                        Button("Done") {}
-                    } message: {
-                        Text("Purchases are not connected yet.")
-                    }
+            Section("Support the Project") {
+                externalRow("Hibiscus Film on GitHub", "Star the project or contribute.", HibiscusLinks.repository)
+                externalRow("Open Chroma Index", "Support open digital color.", HibiscusLinks.openChromaIndex)
+                externalRow("Send Feedback", "Email the developer.", HibiscusLinks.support)
             }
 
             Section("General") {
@@ -149,15 +145,13 @@ struct SettingsScreen: View {
                     }
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Hibiscus Film").font(.headline)
-                        Text("Film. Print. Repeat.").foregroundStyle(.secondary)
+                        Text(verbatim: "Film. Print. Repeat.").foregroundStyle(.secondary)
                         Text(versionText).font(.caption).foregroundStyle(.tertiary)
                     }
                 }
                 .padding(.vertical, 3)
                 .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
 
-                externalRow("Hibiscus Project", "View Hibiscus on GitHub", HibiscusLinks.repository)
-                externalRow("Open Chroma Index", "Support open digital color.", HibiscusLinks.openChromaIndex)
                 externalRow("Privacy", "View Privacy Policy", HibiscusLinks.privacy)
                 externalRow("Terms of Service", "View Terms of Service", HibiscusLinks.terms)
                 NavigationLink {

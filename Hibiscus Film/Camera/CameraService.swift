@@ -57,6 +57,7 @@ final class CameraService: NSObject, ObservableObject {
     nonisolated(unsafe) private var pendingHPanOriginal: Data?
     private var captureRotationObservation: NSKeyValueObservation?
     @Published private(set) var capturedImage: UIImage?
+    @Published private(set) var capturePreviewDismissed = false
     @Published private(set) var capturedPreviewImage: UIImage?
     @Published private(set) var capturedHasMotion = false
     @Published private(set) var capturedLivePhoto: ProcessedLivePhoto?
@@ -233,7 +234,6 @@ final class CameraService: NSObject, ObservableObject {
         capturedHasMotion = false
         capturedImage = nil
         capturedPreviewImage = nil
-        capturedLivePhoto?.cleanUp()
         capturedLivePhoto = nil
         capturedDate = nil
         isSavingCapture = false
@@ -437,27 +437,8 @@ final class CameraService: NSObject, ObservableObject {
             previewRenderer.freeze()
         }
         beginPreviewTransition()
-        capturedImage = nil
-        capturedPreviewImage = nil
-        capturedLivePhoto?.cleanUp()
-        capturedLivePhoto = nil
-        capturedDate = nil
+        clearCaptureResult()
         checkCapturePreferences()
-        pendingProcessedImage = nil
-        pendingPreviewImage = nil
-        pendingHPanOriginal = nil
-        pendingRawData = nil
-        pendingLivePhotoData = nil
-        if let pendingLivePhotoMovieURL { try? FileManager.default.removeItem(at: pendingLivePhotoMovieURL) }
-        pendingLivePhotoMovieURL = nil
-        pendingLivePhotoDisplayTime = nil
-        captureUsesLivePhoto = false
-        capturedHasMotion = false
-        isRecordingLivePhoto = false
-        isProcessingCapture = false
-        isSavingCapture = false
-        captureProcessingToken = UUID()
-        statusMessage = nil
         sessionQueue.async { [weak self] in
             guard let self else { return }
             if let device = self.cameraInput?.device {
@@ -468,6 +449,44 @@ final class CameraService: NSObject, ObservableObject {
                 self.refreshRAWAvailability(applyDefaults: true)
             }
         }
+    }
+
+    func dismissCapturePreview() {
+        guard capturedImage != nil else { return }
+        if isProcessingCapture {
+            capturePreviewDismissed = true
+        } else {
+            clearCaptureResult()
+        }
+    }
+
+    private func clearCaptureResult() {
+        captureProcessingToken = UUID()
+        capturedImage = nil
+        capturedPreviewImage = nil
+        capturedLivePhoto = nil
+        capturedDate = nil
+        pendingProcessedImage = nil
+        pendingPreviewImage = nil
+        pendingHPanOriginal = nil
+        pendingRawData = nil
+        pendingCaptureISO = nil
+        pendingLivePhotoData = nil
+        if let pendingLivePhotoMovieURL { try? FileManager.default.removeItem(at: pendingLivePhotoMovieURL) }
+        pendingLivePhotoMovieURL = nil
+        pendingLivePhotoDisplayTime = nil
+        captureUsesLivePhoto = false
+        capturedHasMotion = false
+        isRecordingLivePhoto = false
+        isProcessingCapture = false
+        isSavingCapture = false
+        captureDeliveryComplete = false
+        captureFrameIndex = nil
+        autoSavePending = nil
+        savedVariants = []
+        originalSaved = false
+        statusMessage = nil
+        capturePreviewDismissed = false
     }
 
     @discardableResult
@@ -807,6 +826,9 @@ final class CameraService: NSObject, ObservableObject {
 
     // Delivery and full-resolution processing can finish in either order.
     private func finishCaptureIfReady() {
+        defer {
+            if capturePreviewDismissed && !isProcessingCapture { clearCaptureResult() }
+        }
         guard canExportCapture else { return }
         if captureFrameIndex == nil {
             let defaults = UserDefaults.standard
@@ -827,24 +849,31 @@ final class CameraService: NSObject, ObservableObject {
             return
         }
 
-        let live = variants.contains(.photo) ? capturedLivePhoto : nil
+        let live = capturedLivePhoto
         let original = originalSaved ? nil : pendingHPanOriginal
         let raw = originalSaved ? nil : pendingRawData
         let date = capturedDate
+        let token = captureProcessingToken
         isSavingCapture = true
 
         Task {
-            defer { isSavingCapture = false }
+            defer {
+                if captureProcessingToken == token { isSavingCapture = false }
+            }
             let access = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
             guard access == .authorized || access == .limited else {
-                handleDeniedPhotoAccess()
+                if captureProcessingToken == token { handleDeniedPhotoAccess() }
                 return
             }
 
             do {
                 let photo = variants.contains(.photo) && live == nil ? try await image.file(for: .photo) : nil
-                let framed = variants.contains(.filmFrame) ? try await image.file(for: .filmFrame) : nil
-                defer { withExtendedLifetime((photo, framed)) {} }
+                let framed = variants.contains(.filmFrame) && live == nil ? try await image.file(for: .filmFrame) : nil
+                let framedLive: ProcessedLivePhoto? = if variants.contains(.filmFrame), let live {
+                    try await image.framedLivePhoto(from: live)
+                } else { nil }
+                let liveVariants = [variants.contains(.photo) ? live : nil, framedLive].compactMap { $0 }
+                defer { withExtendedLifetime((photo, framed, liveVariants)) {} }
 
                 if let raw {
                     let (success, representation, diagnostic) = await withCheckedContinuation { continuation in
@@ -853,6 +882,7 @@ final class CameraService: NSObject, ObservableObject {
                             continuation.resume(returning: (success, representation, diagnostic))
                         }
                     }
+                    guard captureProcessingToken == token else { return }
                     guard success else {
                         let message = LanguageManager.text("Couldn’t save this photo.")
                         statusMessage = diagnostic.map { message + "\n" + $0 } ?? message
@@ -877,7 +907,7 @@ final class CameraService: NSObject, ObservableObject {
                         source.creationDate = date
                         source.addResource(with: .photo, data: original, options: nil)
                     }
-                    if let live {
+                    for live in liveVariants {
                         let request = PHAssetCreationRequest.forAsset()
                         request.creationDate = date
                         request.location = live.location
@@ -890,16 +920,18 @@ final class CameraService: NSObject, ObservableObject {
                         request.addResource(with: .photo, fileURL: file.url, options: nil)
                     }
                 }
+                guard captureProcessingToken == token else { return }
                 if original != nil { originalSaved = true }
                 let message = if original != nil {
                     LanguageManager.text("Saved panorama and original to Photos.")
-                } else if live != nil && framed == nil {
+                } else if liveVariants.count == 1 {
                     LanguageManager.text("Saved Live Photo")
                 } else {
                     LanguageManager.text("Saved to Photos")
                 }
                 finishCaptureSave(variants, message: message)
             } catch {
+                guard captureProcessingToken == token else { return }
                 if PHPhotoLibrary.authorizationStatus(for: .addOnly) == .denied {
                     handleDeniedPhotoAccess()
                 } else {
@@ -1995,6 +2027,7 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
                     guard let self, self.captureProcessingToken == token else { return }
                     self.isProcessingCapture = false
                     self.statusMessage = LanguageManager.text("Couldn’t capture this Live Photo.")
+                    self.finishCaptureIfReady()
                 }
             }
             return
@@ -2012,11 +2045,7 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
                     location: nil
                 )
             }.value
-            guard let self, self.captureProcessingToken == token else {
-                output?.cleanUp()
-                return
-            }
-            self.capturedLivePhoto?.cleanUp()
+            guard let self, self.captureProcessingToken == token else { return }
             self.capturedLivePhoto = output
             if let output, let still = UIImage(contentsOfFile: output.stillURL.path) {
                 self.capturedImage = still

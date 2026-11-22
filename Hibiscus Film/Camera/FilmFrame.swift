@@ -100,10 +100,43 @@ nonisolated enum FilmFrame {
         }
     }
 
-    /// Keeps the photo at its original pixel size. The upper and lower rails
-    /// are the only parts rasterized separately before Core Image composites them.
     static func compose(_ photo: CGImage, stock: StockMark, isHPan: Bool, recipeAccent: AccentRGB?,
                         frameIndex: FrameIndex, captureISO: Int?) -> CIImage? {
+        prepare(photo, stock: stock, isHPan: isHPan, recipeAccent: recipeAccent,
+                frameIndex: frameIndex, captureISO: captureISO)?.render(CIImage(cgImage: photo))
+    }
+
+    struct Composition: Sendable {
+        let photoRect: CGRect
+        let backing: CIImage
+        let aperture: CIImage
+
+        var size: CGSize { backing.extent.size }
+
+        func scaled(to outputSize: CGSize) -> Self {
+            let transform = CGAffineTransform(scaleX: outputSize.width / size.width,
+                                              y: outputSize.height / size.height)
+            let bounds = CGRect(origin: .zero, size: outputSize)
+            return Self(photoRect: photoRect.applying(transform), backing: backing.transformed(by: transform).cropped(to: bounds),
+                        aperture: aperture.transformed(by: transform))
+        }
+
+        func render(_ source: CIImage) -> CIImage? {
+            guard !source.extent.isEmpty, !source.extent.isInfinite else { return nil }
+            let factor = max(photoRect.width / source.extent.width, photoRect.height / source.extent.height)
+            let scaled = source.transformed(by: CGAffineTransform(scaleX: factor, y: factor))
+            let aligned = scaled.transformed(by: CGAffineTransform(translationX: photoRect.midX - scaled.extent.midX,
+                                                                   y: photoRect.midY - scaled.extent.midY))
+            let clipped = CIFilter.sourceInCompositing()
+            clipped.inputImage = aligned
+            clipped.backgroundImage = aperture
+            return clipped.outputImage?.composited(over: backing).cropped(to: backing.extent)
+        }
+    }
+
+    /// Rasterize the edge markings once so still and motion use the same frame and accent.
+    static func prepare(_ photo: CGImage, stock: StockMark, isHPan: Bool, recipeAccent: AccentRGB?,
+                        frameIndex: FrameIndex, captureISO: Int?) -> Composition? {
         guard let typography else { return nil }
         let layout = Layout(width: photo.width, height: photo.height, isHPan: isHPan)
         let accent = palette(recipeAccent: recipeAccent, imageAccent: extractAccent(from: photo), stockAccent: stock.swatch)
@@ -133,20 +166,13 @@ nonisolated enum FilmFrame {
         let backing = solid(base, in: layout.canvas)
         let translatedUpper = CIImage(cgImage: upper)
             .transformed(by: CGAffineTransform(translationX: 0, y: layout.photo.maxY))
-        let translatedPhoto = CIImage(cgImage: photo)
-            .transformed(by: CGAffineTransform(translationX: layout.photo.minX, y: layout.photo.minY))
         let aperture = CIFilter.roundedRectangleGenerator()
         aperture.extent = layout.photo
         aperture.radius = Float(min(layout.gateGap, min(layout.photo.width, layout.photo.height) / 2))
         aperture.color = CIColor(red: 1, green: 1, blue: 1)
         guard let mask = aperture.outputImage else { return nil }
-        let clipped = CIFilter.sourceInCompositing()
-        clipped.inputImage = translatedPhoto
-        clipped.backgroundImage = mask
-        guard let roundedPhoto = clipped.outputImage else { return nil }
-        return roundedPhoto.composited(over:
-            translatedUpper.composited(over: CIImage(cgImage: lower).composited(over: backing))
-        ).cropped(to: layout.canvas)
+        let surround = translatedUpper.composited(over: CIImage(cgImage: lower).composited(over: backing))
+        return Composition(photoRect: layout.photo, backing: surround.cropped(to: layout.canvas), aperture: mask)
     }
 
     static func palette(recipeAccent: AccentRGB?, imageAccent: AccentRGB?, stockAccent: AccentRGB?) -> AccentRGB {
