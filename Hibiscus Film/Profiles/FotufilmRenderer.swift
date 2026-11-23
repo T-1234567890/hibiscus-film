@@ -45,18 +45,20 @@ nonisolated final class FotufilmRenderer: @unchecked Sendable {
         _ = try? FilmEngineInvocation(validating: stock, options: Self.options, width: 480, height: 360)
     }
 
-    func process(_ source: CIImage, profile id: String, realtime: Bool) throws -> CIImage {
-        try process(source, stock: loadStock(id), realtime: realtime)
+    func process(_ source: CIImage, development: FilmDevelopment, realtime: Bool) throws -> CIImage {
+        try process(source, stock: loadStock(development.profileID), expiredYears: development.expiredYears, realtime: realtime)
     }
 
-    func process(_ source: CIImage, stock: FotufilmCore.FilmStock, realtime: Bool) throws -> CIImage {
+    func process(_ source: CIImage, stock: FotufilmCore.FilmStock, expiredYears: Int = 0, realtime: Bool) throws -> CIImage {
         lock.lock()
         defer { lock.unlock() }
         guard let renderer = HalideMetalFilmRenderer.shared else { throw Failure.backend }
         let bounds = source.extent.integral
         guard !bounds.isInfinite, !bounds.isEmpty, bounds.width <= 65536, bounds.height <= 65536 else { throw Failure.image }
         let width = Int(bounds.width), height = Int(bounds.height)
-        let options = Self.options
+        var options = Self.options
+        // Fotufilm applies its native stock expiration while building the invocation.
+        options.expiredYears = Float(expiredYears)
         var transform: FilmOutputTransform?
         var buffer = Data(count: width * height * 8)
         let ok = buffer.withUnsafeMutableBytes { output in

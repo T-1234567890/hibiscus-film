@@ -33,7 +33,7 @@ struct CameraScreen: View {
     }
 
     private func startCamera() {
-        camera.updateProfile(stock: film.active, recipe: film.recipe)
+        camera.updateProfile(stock: film.active, recipe: film.renderRecipe)
         camera.restoreFramingRatio(film.ratio)
         camera.start(live: film.live, lockFocus: film.lockFocus)
     }
@@ -111,8 +111,8 @@ struct CameraScreen: View {
             shareItem = nil
         }
         .onChange(of: camera.isCapturing) { if camera.isCapturing { capturedStock = film.active } }
-        .onChange(of: film.active) { camera.updateProfile(stock: film.active, recipe: film.recipe) }
-        .onChange(of: film.recipe) { camera.updateProfile(stock: film.active, recipe: film.recipe) }
+        .onChange(of: film.active) { camera.updateProfile(stock: film.active, recipe: film.renderRecipe) }
+        .onChange(of: film.renderRecipe) { camera.updateProfile(stock: film.active, recipe: film.renderRecipe) }
         .onChange(of: camera.framingRatio) { film.ratio = camera.framingRatio }
         .onChange(of: camera.selectedMotion) { film.live = camera.selectedMotion == .livePhoto }
         .onChange(of: camera.capturedImage != nil) { _, hasCapture in
@@ -384,10 +384,9 @@ struct CameraScreen: View {
                     Image(systemName: !camera.hpanEnabled && camera.selectedMotion == .livePhoto ? "livephoto" : "livephoto.slash")
                 }
             }
-            .frame(width: 44, height: 44)
-            .contentShape(Rectangle())
+            .frame(width: 18, height: 18)
         }
-        .buttonStyle(.plain)
+        .hibiscusGlassButtonStyle()
         .accessibilityLabel(!camera.hpanEnabled && camera.selectedMotion == .livePhoto ? "Live Photo on" : "Live Photo off")
         .disabled(camera.hpanEnabled || camera.changingMode || !camera.isRunning || camera.isConfiguringLivePhoto || camera.selectedFormat == .raw)
         .opacity(camera.selectedFormat == .processed ? 1 : 0.46)
@@ -821,8 +820,9 @@ struct CameraScreen: View {
                             .overlay(alignment: .topTrailing) {
                                 if camera.capturedHasMotion {
                                     if livePlaybackRequested && captureLivePhotoPreview == nil {
-                                        ProgressView("Loading Live Photo…")
+                                        ProgressView()
                                             .controlSize(.small)
+                                            .accessibilityLabel("Loading Live Photo…")
                                             .padding(10)
                                             .background(.black.opacity(0.70), in: Capsule())
                                             .padding(10)
@@ -864,7 +864,7 @@ struct CameraScreen: View {
                 HibiscusGlassContainer(spacing: 10) {
                     HStack(spacing: 10) {
                         resultButton("Retake", systemImage: "arrow.counterclockwise", action: {
-                            camera.updateProfile(stock: film.active, recipe: film.recipe)
+                            camera.updateProfile(stock: film.active, recipe: film.renderRecipe)
                             camera.retake(lockFocus: film.lockFocus)
                         })
                             .disabled(camera.isSavingCapture || camera.isProcessingCapture || shareVariant != nil)

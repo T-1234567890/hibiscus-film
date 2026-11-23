@@ -10,10 +10,10 @@ enum ControlDot {
 
 struct PadThumb: View {
     var body: some View {
-        Circle().fill(.white)
+        Circle().fill(.white.opacity(0.72))
             .frame(width: ControlDot.padThumb, height: ControlDot.padThumb)
-            .overlay { Circle().stroke(.black.opacity(0.32), lineWidth: 1) }
-            .shadow(color: .black.opacity(0.50), radius: 5, y: 2)
+            .overlay { Circle().strokeBorder(.white.opacity(0.32), lineWidth: 0.75) }
+            .shadow(color: .black.opacity(0.18), radius: 2, y: 1)
             .allowsHitTesting(false)
             .accessibilityHidden(true)
     }

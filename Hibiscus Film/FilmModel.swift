@@ -23,6 +23,22 @@ nonisolated struct Recipe: Codable, Equatable {
     }
     var contrast = 1.0
     var saturation = 1.0
+
+    // The loaded roll's age travels with render snapshots, outside saved recipes.
+    var expiredYears = 0
+    var development: FilmDevelopment? {
+        fotufilmID.map { FilmDevelopment(profileID: $0, expiredYears: expiredYears) }
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case fotufilmID, point, accentPoint, strength, accentStrength, hue
+        case automaticAccent, sceneColor, contrast, saturation
+    }
+}
+
+nonisolated struct FilmDevelopment: Equatable, Sendable {
+    let profileID: String
+    let expiredYears: Int
 }
 
 nonisolated struct Stock: Identifiable, Codable, Equatable {
@@ -49,11 +65,18 @@ nonisolated struct Stock: Identifiable, Codable, Equatable {
 
 @Observable final class FilmSession {
     static let defaultStockPreferenceKey = "defaultStock"
-    private let defaults = UserDefaults.standard
+    private let defaults: UserDefaults
     var custom: [Stock] { didSet { defaults.set(try? JSONEncoder().encode(custom), forKey: "profiles") } }
     var favorites: Set<String> { didSet { defaults.set(Array(favorites), forKey: "favorites") } }
     var stocks: [Stock] { Stock.collection + custom }
     private(set) var active: Stock
+    private(set) var expiration: FilmExpiration
+    private var expiredYears: Int
+    var renderRecipe: Recipe {
+        var snapshot = recipe
+        snapshot.expiredYears = expiredYears
+        return snapshot
+    }
     var recipe: Recipe {
         didSet {
             var local = recipe
@@ -86,8 +109,8 @@ nonisolated struct Stock: Identifiable, Codable, Equatable {
 
     var live: Bool
 
-    init() {
-        let prefs = UserDefaults.standard
+    init(defaults prefs: UserDefaults = .standard) {
+        defaults = prefs
         let saved = (try? JSONDecoder().decode([Stock].self, from: prefs.data(forKey: "profiles") ?? Data())) ?? []
         custom = saved
         favorites = Set(prefs.stringArray(forKey: "favorites") ?? [])
@@ -99,12 +122,23 @@ nonisolated struct Stock: Identifiable, Codable, Equatable {
         active = initial
         recipe = Self.localRecipe(initial, defaults: prefs)
         live = prefs.bool(forKey: "defaultLive")
+        let mode = prefs.string(forKey: FilmExpiration.preferenceKey).flatMap(FilmExpiration.init(rawValue:)) ?? .off
+        expiration = mode
+        expiredYears = mode.ageForLoadedStock()
+    }
+
+    func setExpiration(_ mode: FilmExpiration) {
+        guard expiration != mode else { return }
+        expiration = mode
+        expiredYears = mode.ageForLoadedStock()
+        defaults.set(mode.rawValue, forKey: FilmExpiration.preferenceKey)
     }
 
     func load(_ stock: Stock) {
         guard stock.canRender, active.id != stock.id else { return }
         active = stock
         recipe = Self.localRecipe(stock, defaults: defaults)
+        expiredYears = expiration.ageForLoadedStock()
     }
 
     func refreshStock(_ stock: Stock) {
@@ -165,8 +199,8 @@ actor GradeRenderer {
 
 nonisolated enum FilmColorPipeline {
     static func apply(_ style: OriginalStyle, recipe: Recipe, to source: CIImage, realtime: Bool = false) throws -> CIImage {
-        guard let id = recipe.fotufilmID else { throw FotufilmRenderer.Failure.profile }
-        let negative = try FotufilmRenderer.shared.process(source, profile: id, realtime: realtime)
+        guard let development = recipe.development else { throw FotufilmRenderer.Failure.profile }
+        let negative = try FotufilmRenderer.shared.process(source, development: development, realtime: realtime)
         return try adjust(negative: negative, source: source, recipe: recipe)
     }
 
@@ -177,11 +211,24 @@ nonisolated enum FilmColorPipeline {
             kCIInputSaturationKey: 1 + chroma * 0.055, kCIInputContrastKey: 1 - tone * 0.018
         ])
         let diffused = try HighlightDiffusion.apply(to: styled, tone: tone)
-        let mixed = source.applyingFilter("CIDissolveTransition", parameters: [kCIInputTargetImageKey: diffused, kCIInputTimeKey: recipe.strength / 100])
+        // Film Strength starts at a light stock treatment. Accent keeps a true off position.
+        let filmStrength = min(100, max(0, recipe.strength)) / 100
+        let filmBlend = 0.25 + 0.75 * filmStrength
+        let mixed = source.applyingFilter("CIDissolveTransition", parameters: [
+            kCIInputTargetImageKey: diffused, kCIInputTimeKey: filmBlend
+        ])
         let accent = PadAccent(x: recipe.accentPoint.x, y: recipe.accentPoint.y, strength: recipe.accentStrength / 100)
-        let tones = accent.tones(base: recipe.accentBase)
-        func color(_ rgb: AccentRGB) -> CIColor { CIColor(red: rgb.red, green: rgb.green, blue: rgb.blue) }
-        let accented = HibiscusOriginalStyles.splitTone(mixed, shadow: color(tones.shadow), highlight: color(tones.highlight), amount: accent.strength, placement: tones.pivot)
+        let base = recipe.accentBase
+        var accented = mixed
+        if accent.strength > 0, !recipe.usesSceneAccent || base != .neutralGray {
+            let tones = accent.tones(base: base)
+            func color(_ rgb: AccentRGB) -> CIColor { CIColor(red: rgb.red, green: rgb.green, blue: rgb.blue) }
+            accented = HibiscusOriginalStyles.splitTone(mixed, shadow: color(tones.shadow), highlight: color(tones.highlight),
+                                                        amount: accent.strength, placement: tones.pivot)
+            if recipe.usesSceneAccent {
+                accented = try AutomaticAccent.protectNeutralColors(in: mixed, tinted: accented)
+            }
+        }
         let output = accented.applyingFilter("CIColorControls", parameters: [kCIInputContrastKey: recipe.contrast, kCIInputSaturationKey: recipe.saturation])
         return output
     }

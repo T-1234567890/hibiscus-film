@@ -138,6 +138,9 @@ nonisolated struct HPanConfiguration {
             $0.width == dimensions.width && $0.height == dimensions.height
         }), device.minAvailableVideoZoomFactor <= zoom, zoom <= device.maxAvailableVideoZoomFactor else { throw Failure.format }
         device.videoZoomFactor = zoom
+        if device.isWhiteBalanceModeSupported(.continuousAutoWhiteBalance) {
+            device.whiteBalanceMode = .continuousAutoWhiteBalance
+        }
         if proRAW && output.isAppleProRAWSupported { output.isAppleProRAWEnabled = true }
         output.maxPhotoDimensions = dimensions
         if live && output.isLivePhotoCaptureSupported {

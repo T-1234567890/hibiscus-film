@@ -88,9 +88,9 @@ struct GradeScreen: View {
             let image = await renderer.render(source: source, revision: film.revision, style: nil, recipe: film.recipe)
             if !Task.isCancelled { original = image }
         }
-        .task(id: Request(revision: film.revision, edit: current)) {
+        .task(id: Request(revision: film.revision, edit: Edit(stock: film.active, recipe: film.renderRecipe))) {
             guard let source = film.source else { return }
-            let image = await renderer.render(source: source, revision: film.revision, style: film.active.style, recipe: film.recipe)
+            let image = await renderer.render(source: source, revision: film.revision, style: film.active.style, recipe: film.renderRecipe)
             if !Task.isCancelled {
                 preview = image
                 if image == nil { message = LanguageManager.text("This photograph could not be rendered.") }
@@ -225,7 +225,9 @@ struct GradeScreen: View {
             let data: Data
             if original { data = source.data }
             else {
-                guard let rendered = await renderer.export(source: source, style: film.active.style, recipe: film.recipe) else { throw CocoaError(.fileWriteUnknown) }
+                guard let rendered = await renderer.export(source: source, style: film.active.style, recipe: film.renderRecipe) else {
+                    throw CocoaError(.fileWriteUnknown)
+                }
                 data = rendered
             }
             let access = await PHPhotoLibrary.requestAuthorization(for: .addOnly)

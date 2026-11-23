@@ -73,6 +73,10 @@ struct SettingsScreen: View {
                 .onChange(of: defaultID) {
                     if let stock = session.stocks.first(where: { $0.id == defaultID }) { session.load(stock) }
                 }
+                Picker("Film Expiration", selection: Binding(get: { session.expiration }, set: session.setExpiration)) {
+                    Text("Off").tag(FilmExpiration.off)
+                    Text("Random").tag(FilmExpiration.random)
+                }
                 Picker("Default Capture Format", selection: $captureFormat) {
                     ForEach(CaptureFormatOption.allCases) { Text(verbatim: $0.rawValue).tag($0) }
                 }

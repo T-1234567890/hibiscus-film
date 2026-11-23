@@ -1324,6 +1324,16 @@
         }
       }
     },
+    "Film Expiration" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "胶片过期"
+          }
+        }
+      }
+    },
     "Film Frame draws inspiration from SpektraLab’s Film Edge." : {
       "localizations" : {
         "zh-Hans" : {
@@ -2631,6 +2641,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "适合安静的场景和复古色彩。黑位抬升，饱和度克制，白色压缩。"
+          }
+        }
+      }
+    },
+    "Random" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "随机"
           }
         }
       }

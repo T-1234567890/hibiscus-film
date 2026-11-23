@@ -18,14 +18,18 @@ nonisolated final class CameraPreviewRenderer: NSObject, MTKViewDelegate, @unche
     private var latestAdjustment = Recipe()
     private var frameVersion: UInt64 = 0
     private var submittedVersion: UInt64 = 0
-    var onProfileResult: (@Sendable (String, Bool) -> Void)?
-    private var awaitedProfile: String?
+    var onProfileResult: (@Sendable (FilmDevelopment, Bool) -> Void)?
+    private var awaitedProfile: FilmDevelopment?
 
-    func awaitFirstFrame(for id: String) {
+    func awaitFirstFrame(for profile: FilmDevelopment) {
         lock.lock()
         invalidateProof()
-        awaitedProfile = id
+        awaitedProfile = profile
         lock.unlock()
+    }
+
+    func isAwaitingFirstFrame(for profile: FilmDevelopment) -> Bool {
+        lock.withLock { awaitedProfile == profile }
     }
 
     // Development and display have independent back pressure. A pad edit can use
@@ -33,7 +37,7 @@ nonisolated final class CameraPreviewRenderer: NSObject, MTKViewDelegate, @unche
     private struct Proof {
         let source: CIImage
         let negative: CIImage?
-        let profile: String?
+        let profile: FilmDevelopment?
         let version: UInt64
         let target: CGSize
         let scale: CGFloat
@@ -53,7 +57,10 @@ nonisolated final class CameraPreviewRenderer: NSObject, MTKViewDelegate, @unche
     }
 
     func updateAdjustment(_ recipe: Recipe) {
-        lock.withLock { latestAdjustment = recipe }
+        lock.withLock {
+            if latestAdjustment.development != recipe.development { frameVersion &+= 1 }
+            latestAdjustment = recipe
+        }
     }
 
     private var reportedDevelopmentFailure = false
@@ -168,7 +175,7 @@ nonisolated final class CameraPreviewRenderer: NSObject, MTKViewDelegate, @unche
 
         lock.lock()
         guard !isFrozen, let image = latestImage else { lock.unlock(); return }
-        let profile = latestCharacter == nil ? nil : latestAdjustment.fotufilmID
+        let profile = latestCharacter == nil ? nil : latestAdjustment.development
         guard latestCharacter == nil || awaitedProfile == nil || awaitedProfile == profile else { lock.unlock(); return }
         let epoch = generation
         if !isDeveloping && (submittedVersion != frameVersion || (proof != nil && proof?.target != target)) {
@@ -225,13 +232,13 @@ nonisolated final class CameraPreviewRenderer: NSObject, MTKViewDelegate, @unche
         }
     }
 
-    private func develop(_ image: CIImage, profile: String?, version: UInt64, target: CGSize,
+    private func develop(_ image: CIImage, profile: FilmDevelopment?, version: UInt64, target: CGSize,
                          dimension: CGFloat, epoch: UInt64) {
         let started = CACurrentMediaTime()
         let scale = profile == nil ? 1 : min(1, dimension / max(target.width, target.height))
         let source = aspectFill(image, into: CGRect(x: 0, y: 0, width: target.width * scale, height: target.height * scale))
         do {
-            let negative = try profile.map { try FotufilmRenderer.shared.process(source, profile: $0, realtime: true) }
+            let negative = try profile.map { try FotufilmRenderer.shared.process(source, development: $0, realtime: true) }
             lock.withLock {
                 isDeveloping = false
                 guard generation == epoch else { return }
@@ -249,7 +256,7 @@ nonisolated final class CameraPreviewRenderer: NSObject, MTKViewDelegate, @unche
         }
     }
 
-    private func finishProfile(_ profile: String?, generation epoch: UInt64, success: Bool) {
+    private func finishProfile(_ profile: FilmDevelopment?, generation epoch: UInt64, success: Bool) {
         guard let profile else { return }
         let notify = lock.withLock {
             guard generation == epoch else { return false }

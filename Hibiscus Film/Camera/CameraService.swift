@@ -48,7 +48,7 @@ final class CameraService: NSObject, ObservableObject {
     let hasUltraWide: Bool
     var shutterReady: Bool {
         sessionRequested && isRunning && !changingMode && !isSwitchingCamera && !isCapturing && !isConfiguringLivePhoto &&
-            !isProcessingCapture && (hpanEnabled ? hpanOrientation.isLandscape : pendingCaptureFormat == nil)
+            !isProcessingCapture && !loadingFilm && (hpanEnabled ? hpanOrientation.isLandscape : pendingCaptureFormat == nil)
     }
     // Saved and restored only on sessionQueue.
     nonisolated(unsafe) private var beforeHPan: HPanConfiguration?
@@ -114,7 +114,7 @@ final class CameraService: NSObject, ObservableObject {
     @Published private(set) var isSavingCapture = false
     @Published var statusMessage: String?
     @Published private(set) var loadingFilm = false
-    private var requestedProfileID: String?
+    private var requestedProfile: FilmDevelopment?
 
     nonisolated let previewRenderer: CameraPreviewRenderer
     nonisolated(unsafe) private let session: AVCaptureSession
@@ -190,10 +190,11 @@ final class CameraService: NSObject, ObservableObject {
         self.videoOutput = videoOutput
         self.hasUltraWide = hasUltraWide
         super.init()
-        previewRenderer.onProfileResult = { [weak self] id, success in
+        previewRenderer.onProfileResult = { [weak self] profile, success in
             guard let service = self else { return }
             Task { @MainActor in
-                guard service.requestedProfileID == id else { return }
+                guard service.requestedProfile == profile,
+                      !service.previewRenderer.isAwaitingFirstFrame(for: profile) else { return }
                 service.loadingFilm = false
                 if !success { service.statusMessage = LanguageManager.text("The selected film could not be developed for preview.") }
             }
@@ -207,10 +208,10 @@ final class CameraService: NSObject, ObservableObject {
     }
 
     func updateProfile(stock: Stock, recipe: Recipe) {
-        if let id = recipe.fotufilmID, id != requestedProfileID {
-            requestedProfileID = id
+        if let profile = recipe.development, profile != requestedProfile {
+            requestedProfile = profile
             loadingFilm = true
-            previewRenderer.awaitFirstFrame(for: id)
+            previewRenderer.awaitFirstFrame(for: profile)
         }
         let accent = recipe.usesSceneAccent ? sceneAccent : nil
         let mark = stock.filmFrameMark
@@ -262,7 +263,12 @@ final class CameraService: NSObject, ObservableObject {
 
     private func startAccentSampling() {
         guard accentGeneration == nil else { return }
-        videoQueue.sync { accentGeneration = UUID() }
+        sceneAccent = .neutralGray
+        videoQueue.sync {
+            accentGeneration = UUID()
+            renderCharacterAdjustment.sceneColor = nil
+            previewRenderer.updateAdjustment(renderCharacterAdjustment)
+        }
     }
 
     func stop() {
@@ -1182,7 +1188,10 @@ final class CameraService: NSObject, ObservableObject {
         if photoOutput.isLivePhotoCaptureEnabled != available {
             photoOutput.isLivePhotoCaptureEnabled = available
         }
-        photoOutput.isLivePhotoAutoTrimmingEnabled = available
+        // Keep the full native movie, including motion around the shutter press.
+        if photoOutput.isLivePhotoAutoTrimmingEnabled {
+            photoOutput.isLivePhotoAutoTrimmingEnabled = false
+        }
         Task { @MainActor in
             self.isLivePhotoAvailable = available
             if !available { self.selectedMotion = .photo }
@@ -1800,6 +1809,7 @@ extension CameraService: AVCaptureVideoDataOutputSampleBufferDelegate {
                     self.videoQueue.sync {
                         if self.renderCharacterAdjustment.usesSceneAccent {
                             self.renderCharacterAdjustment.sceneColor = color
+                            self.previewRenderer.updateAdjustment(self.renderCharacterAdjustment)
                         }
                     }
                     self.sceneAccent = color
