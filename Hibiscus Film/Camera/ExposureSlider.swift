@@ -21,6 +21,14 @@ struct ExposureSlider: View {
                 track
                     .labelsHidden()
                     .frame(width: proxy.size.width, height: proxy.size.height)
+                    .overlay {
+                        if value != 0 {
+                            Circle().fill(.secondary)
+                                .frame(width: 5, height: 5)
+                                .allowsHitTesting(false)
+                                .accessibilityHidden(true)
+                        }
+                    }
                     .simultaneousGesture(SpatialTapGesture().onEnded { tap in
                         if abs(tap.location.x - proxy.size.width / 2) <= 12 { value = 0 }
                     })
@@ -39,17 +47,9 @@ struct ExposureSlider: View {
         if #available(iOS 26.0, *) {
             Slider(value: position, in: -1...1, neutralValue: 0) {
                 Text("Exposure compensation")
-            } ticks: {
-                SliderTick(0)
             }
         } else {
             Slider(value: position, in: -1...1) { Text("Exposure compensation") }
-                .overlay {
-                    if value != 0 {
-                        Circle().fill(.secondary).frame(width: 5, height: 5)
-                            .allowsHitTesting(false).accessibilityHidden(true)
-                    }
-                }
         }
     }
 }

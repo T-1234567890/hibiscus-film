@@ -32,7 +32,7 @@ nonisolated enum CameraAutoSaveFormat: String, CaseIterable, Identifiable {
     var title: LocalizedStringKey {
         switch self {
         case .photo: "Save Photo Only"
-        case .filmFrame: "Save With Film Frame"
+        case .filmFrame: "Save With Frame"
         case .both: "Save Both Versions"
         }
     }

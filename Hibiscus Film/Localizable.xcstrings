@@ -3001,12 +3001,12 @@
         }
       }
     },
-    "Save With Film Frame" : {
+    "Save With Frame" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保存带胶片边框的照片"
+            "value" : "保存带边框的照片"
           }
         }
       }
