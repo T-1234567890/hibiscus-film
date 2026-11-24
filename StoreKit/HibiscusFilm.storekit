@@ -8,18 +8,18 @@
       "internalID" : "AC6B85BB-F2B3-447A-9B27-2E8333F7C490",
       "localizations" : [
         {
-          "description" : "Unlock Recipe Kitchen and exports for seven premium Effects.",
-          "displayName" : "Hibiscus Creative Pack",
+          "description" : "Recipe Kitchen and seven additional effects.",
+          "displayName" : "Supporter Pack",
           "locale" : "en_US"
         },
         {
-          "description" : "解锁配方工坊和七种高级效果的导出功能。",
-          "displayName" : "Hibiscus 创意套装",
+          "description" : "解锁配方工坊和七种额外效果的导出功能。",
+          "displayName" : "赞助者套装",
           "locale" : "zh_CN"
         }
       ],
       "productID" : "hibiscus.creativepack.unlock",
-      "referenceName" : "Hibiscus Creative Pack",
+      "referenceName" : "Supporter Pack",
       "type" : "NonConsumable"
     },
     {

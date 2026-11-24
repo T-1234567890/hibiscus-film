@@ -2,14 +2,14 @@ import StoreKit
 import SwiftUI
 
 nonisolated enum HibiscusPurchaseProduct: String, CaseIterable {
-    case creativePack = "hibiscus.creativepack.unlock"
+    case supporterPack = "hibiscus.creativepack.unlock"
     case biscuit = "hibiscus.tip.biscuit"
     case tea = "hibiscus.tip.tea"
     case matcha = "hibiscus.tip.matcha"
 
     static let tips: [Self] = [.biscuit, .tea, .matcha]
 
-    var type: Product.ProductType { self == .creativePack ? .nonConsumable : .consumable }
+    var type: Product.ProductType { self == .supporterPack ? .nonConsumable : .consumable }
 
     static func matching(id: String, type: Product.ProductType) -> Self? {
         guard let item = Self(rawValue: id), item.type == type else { return nil }
@@ -17,7 +17,7 @@ nonisolated enum HibiscusPurchaseProduct: String, CaseIterable {
     }
 }
 
-nonisolated enum CreativePackEntitlement: Equatable {
+nonisolated enum SupporterPackEntitlement: Equatable {
     case checking, locked, unlocked
 }
 
@@ -27,20 +27,20 @@ final class AppPurchases {
         case completed, pending, cancelled, notFound, unverified, failed
     }
 
-    private(set) var entitlement = CreativePackEntitlement.checking
+    private(set) var entitlement = SupporterPackEntitlement.checking
     private(set) var purchasing: HibiscusPurchaseProduct?
     private(set) var restoring = false
     @ObservationIgnored private var entitlementRevision = 0
 
     var busy: Bool { purchasing != nil || restoring }
-    var canUseCreativePack: Bool { entitlement == .unlocked }
+    var canUseSupporterPack: Bool { entitlement == .unlocked }
 
     func observeTransactions() async {
-        async let initialRefresh: Void = refreshCreativePack()
+        async let initialRefresh: Void = refreshSupporterPack()
         for await update in Transaction.updates {
             guard case .verified(let transaction) = update,
                   let item = HibiscusPurchaseProduct.matching(id: transaction.productID, type: transaction.productType) else { continue }
-            if item == .creativePack { await refreshCreativePack() }
+            if item == .supporterPack { await refreshSupporterPack() }
             await transaction.finish()
         }
         await initialRefresh
@@ -56,12 +56,12 @@ final class AppPurchases {
             case .success(let result):
                 guard case .verified(let transaction) = result,
                       transaction.productID == item.rawValue, transaction.productType == item.type else { return .unverified }
-                if item == .creativePack {
+                if item == .supporterPack {
                     if transaction.revocationDate == nil {
                         entitlementRevision += 1
                         entitlement = .unlocked
                     } else {
-                        await refreshCreativePack()
+                        await refreshSupporterPack()
                     }
                 }
                 await transaction.finish()
@@ -77,13 +77,13 @@ final class AppPurchases {
         }
     }
 
-    func restoreCreativePack() async -> Outcome {
+    func restoreSupporterPack() async -> Outcome {
         guard !busy else { return .failed }
         restoring = true
         defer { restoring = false }
         do {
             try await AppStore.sync()
-            await refreshCreativePack()
+            await refreshSupporterPack()
             return entitlement == .unlocked ? .completed : .notFound
         } catch StoreKitError.userCancelled {
             return .cancelled
@@ -92,13 +92,13 @@ final class AppPurchases {
         }
     }
 
-    private func refreshCreativePack() async {
+    private func refreshSupporterPack() async {
         entitlementRevision += 1
         let revision = entitlementRevision
-        var refreshed = CreativePackEntitlement.locked
+        var refreshed = SupporterPackEntitlement.locked
         for await result in Transaction.currentEntitlements {
             if case .verified(let transaction) = result,
-               transaction.productID == HibiscusPurchaseProduct.creativePack.rawValue,
+               transaction.productID == HibiscusPurchaseProduct.supporterPack.rawValue,
                transaction.productType == .nonConsumable,
                transaction.revocationDate == nil {
                 refreshed = .unlocked

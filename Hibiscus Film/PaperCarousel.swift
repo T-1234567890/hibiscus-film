@@ -82,7 +82,7 @@ struct PaperCarousel<Item: Hashable>: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(label)
         .accessibilityValue(isLocked(finishes[selection])
-            ? Text("\(Text(LocalizedStringKey(name(finishes[selection])))), requires Creative Pack")
+            ? Text("\(Text(LocalizedStringKey(name(finishes[selection])))), requires Supporter Pack")
             : Text(LocalizedStringKey(name(finishes[selection]))))
         .accessibilityAdjustableAction { settle(on: wrapped(selection + ($0 == .increment ? 1 : -1))) }
         .sensoryFeedback(.selection, trigger: selection) { _, _ in !automaticallyAdvances }

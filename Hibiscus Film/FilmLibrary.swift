@@ -240,10 +240,10 @@ struct HSpecSettingsSection: View {
 
             Button("Recipe Kitchen") { newProfile = true }
                 .sheet(isPresented: $newProfile) {
-                    if purchases.canUseCreativePack {
+                    if purchases.canUseSupporterPack {
                         RecipeKitchen()
                     } else {
-                        CreativePackPaywall(photo: effectsPhoto)
+                        SupporterPackPaywall(photo: effectsPhoto)
                     }
                 }
         } header: {

@@ -22,7 +22,7 @@ nonisolated enum PrintEffect: String, CaseIterable, Identifiable {
 
     var id: Self { self }
 
-    var requiresCreativePack: Bool {
+    var requiresSupporterPack: Bool {
         switch self {
         case .photocopy, .risograph, .fiber, .ascii, .engraving, .solarized, .chromaticDrift: true
         case .newsprint, .magazine, .duotone, .warm, .cyanotype, .archive, .fade, .halftone: false

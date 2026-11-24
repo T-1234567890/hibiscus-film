@@ -62,7 +62,7 @@ private struct EffectProof: View {
     let choose: () -> Void
     let exit: () -> Void
     @State private var confirmingExit = false
-    @State private var showCreativePack = false
+    @State private var showSupporterPack = false
 
     private static let engine = HibiscusPrintEngine()
     @State private var effect = PrintEffect.newsprint
@@ -107,7 +107,7 @@ private struct EffectProof: View {
     }
 
     private func isLocked(_ effect: PrintEffect) -> Bool {
-        effect.requiresCreativePack && !purchases.canUseCreativePack
+        effect.requiresSupporterPack && !purchases.canUseSupporterPack
     }
 
     var body: some View {
@@ -197,8 +197,8 @@ private struct EffectProof: View {
             playingLive = false
             renderedLive = nil
         }
-        .sheet(isPresented: $showCreativePack) {
-            CreativePackPaywall(photo: photo.preview.cgImage)
+        .sheet(isPresented: $showSupporterPack) {
+            SupporterPackPaywall(photo: photo.preview.cgImage)
         }
         .sheet(item: $file, onDismiss: { sharedLivePhoto = nil }) { item in
             PhotoShareSheet(file: item, livePhoto: sharedLivePhoto) { _, error in
@@ -226,11 +226,11 @@ private struct EffectProof: View {
     private var exportControl: some View {
         if isLocked(effect) {
             Button {
-                showCreativePack = true
+                showSupporterPack = true
             } label: {
                 exportSymbol
             }
-            .accessibilityHint("Requires Creative Pack")
+            .accessibilityHint("Requires Supporter Pack")
         } else {
             Menu {
                 Button { export = .save } label: {
@@ -280,7 +280,7 @@ private struct EffectProof: View {
         .onTapGesture { if export == nil && !importing && !playingLive { choose() } }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(Text(LocalizedStringKey(effect.rawValue))) photograph")
-        .accessibilityValue(isLocked(effect) ? Text("Requires Creative Pack") : Text(verbatim: ""))
+        .accessibilityValue(isLocked(effect) ? Text("Requires Supporter Pack") : Text(verbatim: ""))
         .accessibilityHint("Tap to replace the photo")
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { if export == nil && !importing && !playingLive { choose() } }
@@ -436,7 +436,7 @@ private struct EffectProof: View {
 
     private func checkExportAccess(for effect: PrintEffect) -> Bool {
         guard isLocked(effect) else { return true }
-        showCreativePack = true
+        showSupporterPack = true
         return false
     }
 }

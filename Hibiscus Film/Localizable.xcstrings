@@ -4,16 +4,6 @@
     "" : {
 
     },
-    "%@ · One-time purchase · No subscription" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · 一次性购买 · 无需订阅"
-          }
-        }
-      }
-    },
     "%@ %lld, %@ %lld" : {
       "localizations" : {
         "zh-Hans" : {
@@ -55,12 +45,22 @@
         }
       }
     },
-    "%@, requires Creative Pack" : {
+    "%@ · One purchase. No subscription." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@，需要创意套装"
+            "value" : "%@ · 一次性购买，无需订阅。"
+          }
+        }
+      }
+    },
+    "%@, requires Supporter Pack" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@，需要赞助者套装"
           }
         }
       }
@@ -248,6 +248,16 @@
         }
       }
     },
+    "Additional Effects" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "额外摄影效果"
+          }
+        }
+      }
+    },
     "Additional film profile sources" : {
       "localizations" : {
         "zh-Hans" : {
@@ -416,6 +426,16 @@
         }
       }
     },
+    "As a thank-you for your support, unlock Recipe Kitchen and additional photographic effects." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "为感谢你的赞助，我们将为你解锁配方工坊和额外的摄影效果。"
+          }
+        }
+      }
+    },
     "ASCII" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -489,6 +509,16 @@
         }
       }
     },
+    "Become a Supporter" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成为赞助者"
+          }
+        }
+      }
+    },
     "Black toner / white" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -520,22 +550,22 @@
         }
       }
     },
-    "Build from scratch or start from a film stock. Edit response and color curves, grain, and halation with a live Fotufilm preview. Save your recipes and export them as .hspec files." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "从空白配方开始，或选用现有胶片。编辑响应曲线、色彩曲线、颗粒与晕光，并使用 Fotufilm 实时预览。保存配方并导出为 .hspec 文件。"
-          }
-        }
-      }
-    },
     "Building midtones" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在显现中间调"
+          }
+        }
+      }
+    },
+    "By becoming a supporter, you help us maintain Hibiscus, fix bugs, and continue exploring new possibilities in photography." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "成为赞助者，你将帮助我们维护 Hibiscus、修复问题，并继续探索摄影的新可能。"
           }
         }
       }
@@ -860,42 +890,22 @@
         }
       }
     },
+    "Create, customize, save, and export original film recipes as .hspec files." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创建、编辑和保存原创胶片配方，并将其导出为 .hspec 文件。"
+          }
+        }
+      }
+    },
     "Creative Commons BY-SA 4.0" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "知识共享 署名—相同方式共享 4.0"
-          }
-        }
-      }
-    },
-    "Creative Pack is currently unavailable." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "创意套装暂时无法购买。"
-          }
-        }
-      }
-    },
-    "Creative Pack is open source. The one-time App Store purchase helps sustain development of Hibiscus Film." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "创意套装是开源的。App Store 的一次性购买有助于支持 Hibiscus Film 的持续开发。"
-          }
-        }
-      }
-    },
-    "Creative Pack unlocked" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "创意套装已解锁"
           }
         }
       }
@@ -1215,16 +1225,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "探索 1234567890.dev 的更多作品"
-          }
-        }
-      }
-    },
-    "Explore your own film recipes, experiment with advanced photographic effects, and develop your own visual style." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "探索自己的胶片配方，尝试更多摄影效果，逐步形成独特的视觉风格。"
           }
         }
       }
@@ -1607,16 +1607,6 @@
         }
       }
     },
-    "Hibiscus Creative Pack" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hibiscus 创意套装"
-          }
-        }
-      }
-    },
     "Hibiscus Film" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1634,6 +1624,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hibiscus Film 无法启动相机。"
+          }
+        }
+      }
+    },
+    "Hibiscus Film is free, open source, and independently developed. Keeping it free takes time, effort, and resources." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hibiscus Film 是一款独立开发的免费开源应用。持续免费提供它，需要投入时间、精力和资源。"
           }
         }
       }
@@ -1658,12 +1658,12 @@
         }
       }
     },
-    "Hibiscus Film, including Creative Pack, is open source and supported by its community. Your support helps fund bug fixes, compatibility updates, and new features." : {
+    "Hibiscus Film, including Supporter Pack, is open source and supported by its community. Your support helps fund bug fixes, compatibility updates, and new features." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hibiscus Film（包括创意套装）是由社区支持的开源项目。你的赞助将用于修复问题、更新兼容性和开发新功能。"
+            "value" : "Hibiscus Film（包括赞助者套装）是由社区支持的开源项目。你的赞助将用于修复问题、更新兼容性和开发新功能。"
           }
         }
       }
@@ -2221,16 +2221,6 @@
         }
       }
     },
-    "More room to create." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "给创作更多空间。"
-          }
-        }
-      }
-    },
     "Mozilla Public License 2.0" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2274,22 +2264,22 @@
         }
       }
     },
-    "No Creative Pack purchase was found for this Apple Account." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此 Apple 账户没有创意套装购买记录。"
-          }
-        }
-      }
-    },
     "No matching stocks" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有找到匹配的胶片"
+          }
+        }
+      }
+    },
+    "No Supporter Pack purchase was found for this Apple Account." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 Apple 账户没有赞助者套装的购买记录。"
           }
         }
       }
@@ -2727,12 +2717,12 @@
         }
       }
     },
-    "Recipe Kitchen and seven premium Effects" : {
+    "Recipe Kitchen and seven additional Effects" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "配方工坊与七种高级效果"
+            "value" : "配方工坊与七种额外摄影效果"
           }
         }
       }
@@ -2808,12 +2798,12 @@
         }
       }
     },
-    "Requires Creative Pack" : {
+    "Requires Supporter Pack" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "需要创意套装"
+            "value" : "需要赞助者套装"
           }
         }
       }
@@ -3190,16 +3180,6 @@
         }
       }
     },
-    "Seven premium Effects" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "七种高级效果"
-          }
-        }
-      }
-    },
     "Share" : {
       "localizations" : {
         "zh-Hans" : {
@@ -3367,6 +3347,36 @@
         }
       }
     },
+    "Supporter Pack" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助者套装"
+          }
+        }
+      }
+    },
+    "Supporter Pack is currently unavailable." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助者套装暂时无法购买。"
+          }
+        }
+      }
+    },
+    "Supporter Pack unlocked" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助者套装已解锁"
+          }
+        }
+      }
+    },
     "System Default" : {
       "localizations" : {
         "zh-Hans" : {
@@ -3428,26 +3438,6 @@
         }
       }
     },
-    "The Creative Pack purchase could not be verified." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法验证创意套装的购买。"
-          }
-        }
-      }
-    },
-    "The Creative Pack request could not be completed. Please try again." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法完成创意套装请求，请重试。"
-          }
-        }
-      }
-    },
     "The film processing kernels are unavailable." : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3488,6 +3478,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法生成所选胶片的预览。"
+          }
+        }
+      }
+    },
+    "The Supporter Pack purchase could not be verified." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法验证赞助者套装的购买。"
+          }
+        }
+      }
+    },
+    "The Supporter Pack request could not be completed. Please try again." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法完成赞助者套装的请求，请重试。"
           }
         }
       }
@@ -3594,6 +3604,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法渲染这张照片。"
+          }
+        }
+      }
+    },
+    "This purchase applies only to Hibiscus Film and does not unlock features in other Hibiscus apps." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此购买仅适用于 Hibiscus Film，不解锁其他 Hibiscus 应用中的付费功能。"
           }
         }
       }
@@ -3731,16 +3751,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "撤销"
-          }
-        }
-      }
-    },
-    "Unlock Creative Pack" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "解锁创意套装"
           }
         }
       }
@@ -3901,12 +3911,12 @@
         }
       }
     },
-    "Your purchase is pending approval. Creative Pack will unlock once it’s approved." : {
+    "Your purchase is pending approval. Supporter Pack will unlock once it’s approved." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "购买正在等待批准。批准后，创意套装将自动解锁。"
+            "value" : "购买正在等待批准。批准后，赞助者套装将自动解锁。"
           }
         }
       }

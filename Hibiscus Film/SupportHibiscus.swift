@@ -17,7 +17,7 @@ struct SupportHibiscus: View {
                         Text("Help Keep Hibiscus Alive.")
                             .font(.title2.weight(.semibold))
                             .accessibilityAddTraits(.isHeader)
-                        Text("Hibiscus Film, including Creative Pack, is open source and supported by its community. Your support helps fund bug fixes, compatibility updates, and new features.")
+                        Text("Hibiscus Film, including Supporter Pack, is open source and supported by its community. Your support helps fund bug fixes, compatibility updates, and new features.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }

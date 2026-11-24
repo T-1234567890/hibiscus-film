@@ -18,7 +18,7 @@ struct SettingsScreen: View {
     @State private var requestingPhotoAccess = false
     @State private var showPhotoPermissionAlert = false
     @State private var showingSupport = false
-    @State private var showingCreativePack = false
+    @State private var showingSupporterPack = false
     var body: some View {
         @Bindable var session = session
         Form {
@@ -30,9 +30,9 @@ struct SettingsScreen: View {
                 }
 
                 Button {
-                    showingCreativePack = true
+                    showingSupporterPack = true
                 } label: {
-                    SettingsRow(title: "Hibiscus Creative Pack", subtitle: "Recipe Kitchen and seven premium Effects")
+                    SettingsRow(title: "Supporter Pack", subtitle: "Recipe Kitchen and seven additional Effects")
                 }
             }
 
@@ -181,7 +181,7 @@ struct SettingsScreen: View {
         }
         .task { remoteContent.refreshInBackground() }
         .sheet(isPresented: $showingSupport) { SupportHibiscus() }
-        .sheet(isPresented: $showingCreativePack) { CreativePackPaywall(photo: effectsPhoto) }
+        .sheet(isPresented: $showingSupporterPack) { SupporterPackPaywall(photo: effectsPhoto) }
         .onAppear { refreshPhotoPermission() }
         .onChange(of: scenePhase) {
             if scenePhase == .active { refreshPhotoPermission() }
