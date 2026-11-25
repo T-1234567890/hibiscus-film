@@ -82,7 +82,8 @@ final class CameraService: NSObject, ObservableObject {
     @Published private var firstExposure: Data?
     var awaitingSecondExposure: Bool { firstExposure != nil }
     var canUseDoubleExposure: Bool {
-        !hpanEnabled && !changingMode && !isConfiguringLivePhoto && selectedMotion == .photo && selectedFormat == .processed
+        purchases.canUseSupporterPack && !hpanEnabled && !changingMode && !isConfiguringLivePhoto &&
+            selectedMotion == .photo && selectedFormat == .processed
     }
     @Published var selectedMotion: CaptureMotionOption = .photo {
         didSet {
@@ -169,7 +170,9 @@ final class CameraService: NSObject, ObservableObject {
     private var wantsLivePhoto = false
     private var locksFocus = false
     private var shouldApplyDefaultMotionOnStart = false
-    @concurrent static func prepare() async -> CameraService? {
+    private let purchases: AppPurchases
+
+    @concurrent static func prepare(purchases: AppPurchases) async -> CameraService? {
         guard let renderer = CameraPreviewRenderer(device: MTLCreateSystemDefaultDevice()) else { return nil }
         let accentSampler = LiveAccentSampler()
         let session = AVCaptureSession()
@@ -178,17 +181,20 @@ final class CameraService: NSObject, ObservableObject {
         let hasUltraWide = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back) != nil
         let authorization = AVCaptureDevice.authorizationStatus(for: .video)
         return await CameraService(renderer: renderer, accentSampler: accentSampler, session: session, photoOutput: photoOutput,
-                                   videoOutput: videoOutput, hasUltraWide: hasUltraWide, authorization: authorization)
+                                   videoOutput: videoOutput, hasUltraWide: hasUltraWide, authorization: authorization,
+                                   purchases: purchases)
     }
 
     private init(renderer: CameraPreviewRenderer, accentSampler: LiveAccentSampler, session: AVCaptureSession, photoOutput: AVCapturePhotoOutput,
-                 videoOutput: AVCaptureVideoDataOutput, hasUltraWide: Bool, authorization: AVAuthorizationStatus) {
+                 videoOutput: AVCaptureVideoDataOutput, hasUltraWide: Bool, authorization: AVAuthorizationStatus,
+                 purchases: AppPurchases) {
         self.accentSampler = accentSampler
         self.previewRenderer = renderer
         self.session = session
         self.photoOutput = photoOutput
         self.videoOutput = videoOutput
         self.hasUltraWide = hasUltraWide
+        self.purchases = purchases
         super.init()
         previewRenderer.onProfileResult = { [weak self] profile, success in
             guard let service = self else { return }
@@ -297,7 +303,7 @@ final class CameraService: NSObject, ObservableObject {
         UISelectionFeedbackGenerator().selectionChanged()
     }
 
-    private func clearDoubleExposureMode() {
+    func clearDoubleExposureMode() {
         if doubleExposureEnabled { doubleExposureEnabled = false }
         if firstExposure != nil { firstExposure = nil }
     }
@@ -847,7 +853,7 @@ final class CameraService: NSObject, ObservableObject {
         saveCapture(format.variants)
     }
 
-    func saveCapture(_ requested: Set<CameraExportVariant>) {
+    func saveCapture(_ requested: Set<CameraExportVariant>, onSuccess: (() -> Void)? = nil) {
         let variants = requested.subtracting(savedVariants)
         guard !variants.isEmpty, let image = captureForExport() else { return }
         guard !captureRequiresRAW || pendingRawData != nil else {
@@ -904,6 +910,7 @@ final class CameraService: NSObject, ObservableObject {
                     } else {
                         finishCaptureSave(variants, message: LanguageManager.text("Saved to Photos"))
                     }
+                    onSuccess?()
                     return
                 }
 
@@ -936,6 +943,7 @@ final class CameraService: NSObject, ObservableObject {
                     LanguageManager.text("Saved to Photos")
                 }
                 finishCaptureSave(variants, message: message)
+                onSuccess?()
             } catch {
                 guard captureProcessingToken == token else { return }
                 if PHPhotoLibrary.authorizationStatus(for: .addOnly) == .denied {
@@ -1988,9 +1996,10 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
                 self.capturedDate = nil
                 self.autoSavePending = nil
                 self.previewRenderer.resume()
-                if error == nil, let exposed, self.sessionRequested {
+                guard self.sessionRequested, self.doubleExposureEnabled, self.purchases.canUseSupporterPack else { return }
+                if error == nil, let exposed {
                     self.firstExposure = exposed
-                } else if self.sessionRequested {
+                } else {
                     self.statusMessage = LanguageManager.text("Couldn’t capture this photo.")
                 }
             }

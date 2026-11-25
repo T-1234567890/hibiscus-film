@@ -21,7 +21,7 @@ Hibiscus Film is an open-source iPhone camera and photographic effects app built
 Choose a film stock and see it in the viewfinder before shooting. The camera supports exposure compensation, flash, grid, HEIF, RAW with a developed JPEG companion, and Live Photo, depending on the device and capture mode. The Camera settings include defaults for the stock, capture resolution and capture format.
 
 - **HPan0.5** uses the rear Ultra Wide camera at its highest supported photo resolution. Hold the phone horizontally to capture a single approximately 65:24 photograph.
-- **Double Exposure** blends two still captures before the selected film stock is applied.
+- **Double Exposure** blends two still captures before the selected film stock is applied. Requires Supporter Pack.
 - **Style and Accent** use two Color Pads and a shared Strength control. Accent can follow the scene or use a manually chosen color. Moving the Style pad toward highlights adds highlight diffusion.
 
 ## Film Library
@@ -68,7 +68,7 @@ The Hibiscus Print Engine handles Effects. Fotufilm handles camera film simulati
 
 ## Supporter Pack and community support
 
-Hibiscus Film’s open-source code includes **Supporter Pack**. The $4.99 USD one-time purchase helps sustain the project and unlocks Recipe Kitchen and exports for seven additional Effects in Hibiscus Film. The camera is free. **Support Hibiscus** is a separate way to contribute voluntarily.
+Hibiscus Film’s open-source code includes **Supporter Pack**. The $6.99 USD one-time purchase helps sustain the project and unlocks Recipe Kitchen, Double Exposure, and exports for seven additional Effects. Standard camera capture is free. **Support Hibiscus** is a separate way to contribute voluntarily.
 
 Supporter Pack is locked until a purchase is verified, including in self-built copies. To remove the paywall from your own build, edit the source before building.
 

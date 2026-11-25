@@ -45,16 +45,6 @@
         }
       }
     },
-    "%@ · One purchase. No subscription." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · 一次性购买，无需订阅。"
-          }
-        }
-      }
-    },
     "%@, requires Supporter Pack" : {
       "localizations" : {
         "zh-Hans" : {
@@ -127,22 +117,22 @@
         }
       }
     },
-    "A Biscuit" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一块饼干"
-          }
-        }
-      }
-    },
     "A camera isn’t available on this device." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "此设备上没有可用的相机。"
+          }
+        }
+      }
+    },
+    "A Cup of Tea" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一杯茶"
           }
         }
       }
@@ -164,16 +154,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一杯抹茶拿铁"
-          }
-        }
-      }
-    },
-    "A Tea" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一杯茶"
           }
         }
       }
@@ -372,6 +352,16 @@
         }
       }
     },
+    "Already purchased? [Restore Purchases](hibiscus-film://restore-purchases)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已购买？[恢复购买](hibiscus-film://restore-purchases)"
+          }
+        }
+      }
+    },
     "Apache License 2.0" : {
       "localizations" : {
         "zh-Hans" : {
@@ -422,16 +412,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此配置已归档，可用于交换。Fotufilm 中没有与之匹配的底片。"
-          }
-        }
-      }
-    },
-    "As a thank-you for your support, unlock Recipe Kitchen and additional photographic effects." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "为感谢你的赞助，我们将为你解锁配方工坊和额外的摄影效果。"
           }
         }
       }
@@ -540,6 +520,16 @@
         }
       }
     },
+    "Blend two camera captures into one photograph." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将两次拍摄融合为一张照片。"
+          }
+        }
+      }
+    },
     "Blue" : {
       "localizations" : {
         "zh-Hans" : {
@@ -556,16 +546,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在显现中间调"
-          }
-        }
-      }
-    },
-    "By becoming a supporter, you help us maintain Hibiscus, fix bugs, and continue exploring new possibilities in photography." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "成为赞助者，你将帮助我们维护 Hibiscus、修复问题，并继续探索摄影的新可能。"
           }
         }
       }
@@ -825,12 +805,12 @@
         }
       }
     },
-    "Contributions do not unlock features." : {
+    "Cookie" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "赞助不会解锁功能。"
+            "value" : "曲奇"
           }
         }
       }
@@ -1628,16 +1608,6 @@
         }
       }
     },
-    "Hibiscus Film is free, open source, and independently developed. Keeping it free takes time, effort, and resources." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hibiscus Film 是一款独立开发的免费开源应用。持续免费提供它，需要投入时间、精力和资源。"
-          }
-        }
-      }
-    },
     "Hibiscus Film on GitHub" : {
       "localizations" : {
         "zh-Hans" : {
@@ -1658,12 +1628,12 @@
         }
       }
     },
-    "Hibiscus Film, including Supporter Pack, is open source and supported by its community. Your support helps fund bug fixes, compatibility updates, and new features." : {
+    "Hibiscus Film, including Supporter Pack, is open source and supported by its community. Your support helps fund our ongoing work." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hibiscus Film（包括赞助者套装）是由社区支持的开源项目。你的赞助将用于修复问题、更新兼容性和开发新功能。"
+            "value" : "Hibiscus Film（包括赞助者套装）是由社区支持的开源项目。你的赞助为我们继续开展工作提供支持。"
           }
         }
       }
@@ -2053,16 +2023,6 @@
         }
       }
     },
-    "Loading contributions…" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在加载赞助选项…"
-          }
-        }
-      }
-    },
     "Loading Live Photo…" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2131,6 +2091,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "对数曝光量"
+          }
+        }
+      }
+    },
+    "Looking for the Supporter Pack?" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "想了解赞助者套装？"
           }
         }
       }
@@ -2330,6 +2300,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一次性赞助"
+          }
+        }
+      }
+    },
+    "One-time purchase. No subscription." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一次性购买，无需订阅。"
           }
         }
       }
@@ -2717,12 +2697,12 @@
         }
       }
     },
-    "Recipe Kitchen and seven additional Effects" : {
+    "Recipe Kitchen, Double Exposure, and seven additional Effects" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "配方工坊与七种额外摄影效果"
+            "value" : "配方工坊、双重曝光和七种额外摄影效果"
           }
         }
       }
@@ -2848,12 +2828,12 @@
         }
       }
     },
-    "Restore Purchases" : {
+    "Restoring purchases…" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "恢复购买"
+            "value" : "正在恢复购买…"
           }
         }
       }
@@ -3684,6 +3664,16 @@
         }
       }
     },
+    "Tips support development and do not unlock any features." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "赞助用于支持开发，不会解锁任何功能。"
+          }
+        }
+      }
+    },
     "Tone" : {
       "localizations" : {
         "zh-Hans" : {
@@ -3751,6 +3741,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "撤销"
+          }
+        }
+      }
+    },
+    "Unlock Recipe Kitchen and additional creative tools." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解锁配方工坊和更多创作工具。"
           }
         }
       }
@@ -3917,6 +3917,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "购买正在等待批准。批准后，赞助者套装将自动解锁。"
+          }
+        }
+      }
+    },
+    "Your support keeps Hibiscus Film free and open source. It helps fund our ongoing work." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的赞助帮助 Hibiscus Film 保持免费和开源，也为我们继续开展工作提供支持。"
           }
         }
       }

@@ -3,6 +3,7 @@ import SwiftUI
 private enum FilmTab: Hashable { case camera, effects, settings }
 
 struct ContentView: View {
+    @Environment(AppPurchases.self) private var purchases
     @EnvironmentObject private var languageManager: LanguageManager
     @State private var camera: CameraService?
     @State private var cameraPreparationFailed = false
@@ -19,7 +20,7 @@ struct ContentView: View {
                 Tab(languageManager.string("Camera"), systemImage: "camera", value: FilmTab.camera) {
                     if let camera {
                         CameraScreen(camera: camera, isActive: tab == .camera, navigationSize: space.size,
-                                     navigationShutter: $navigationShutter)
+                                     navigationShutter: $navigationShutter, effectsPhoto: effectsPhoto)
                     } else {
                         ZStack {
                             Color(white: 0.065).ignoresSafeArea()
@@ -58,7 +59,7 @@ struct ContentView: View {
         .task(id: cameraAttempt) {
             guard camera == nil else { return }
             cameraPreparationFailed = false
-            let prepared = await CameraService.prepare()
+            let prepared = await CameraService.prepare(purchases: purchases)
             guard !Task.isCancelled else { return }
             camera = prepared
             cameraPreparationFailed = prepared == nil

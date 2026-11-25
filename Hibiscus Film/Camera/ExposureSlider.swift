@@ -3,15 +3,31 @@ import SwiftUI
 struct ExposureSlider: View {
     @Binding var value: Double
     let range: ClosedRange<Double>
+    private static let neutralDetent = 0.07
 
-    // Keep zero at the midpoint even when the lens has asymmetric EV limits.
     private var position: Binding<Double> {
         Binding {
-            let extent = value < 0 ? -range.lowerBound : range.upperBound
-            return extent > 0 ? value / extent : 0
+            Self.sliderPosition(for: value, in: range)
         } set: { position in
-            value = position * (position < 0 ? -range.lowerBound : range.upperBound)
+            let exposure = Self.exposureValue(for: position, in: range)
+            if exposure != value { value = exposure }
         }
+    }
+
+    // Give zero a small capture zone while keeping both sides continuous and full-range.
+    private static func sliderPosition(for exposure: Double, in range: ClosedRange<Double>) -> Double {
+        let endpoint = exposure < 0 ? range.lowerBound : range.upperBound
+        guard exposure != 0, endpoint != 0 else { return 0 }
+        let progress = min(1, max(0, exposure / endpoint))
+        let distance = neutralDetent + progress * (1 - neutralDetent)
+        return exposure < 0 ? -distance : distance
+    }
+
+    private static func exposureValue(for position: Double, in range: ClosedRange<Double>) -> Double {
+        let distance = abs(position)
+        guard distance > neutralDetent else { return 0 }
+        let progress = (min(distance, 1) - neutralDetent) / (1 - neutralDetent)
+        return progress * (position < 0 ? min(0, range.lowerBound) : max(0, range.upperBound))
     }
 
     var body: some View {
@@ -40,6 +56,7 @@ struct ExposureSlider: View {
         }
         .font(.caption)
         .frame(height: 44)
+        .sensoryFeedback(.selection, trigger: value == 0) { _, isNeutral in isNeutral }
     }
 
     @ViewBuilder

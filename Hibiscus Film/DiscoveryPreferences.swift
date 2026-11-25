@@ -9,6 +9,8 @@ final class DiscoveryPreferences: ObservableObject {
     private let dismissedKey = "state.discovery.exploreMoreDismissedAt"
     private let openedKey = "state.discovery.exploreMoreOpenedAt"
     private static let enabledKey = "settings.discovery.exploreMoreAfterExport"
+    private static let dismissalCooldown: TimeInterval = 5 * 24 * 60 * 60
+    private static let openedCooldown: TimeInterval = 14 * 24 * 60 * 60
     private var openedDuringPresentation = false
     @Published var isPresented = false
     @Published var enabled: Bool {
@@ -30,9 +32,9 @@ final class DiscoveryPreferences: ObservableObject {
     func presentAfterExport(at date: Date = Date()) -> Bool {
         guard enabled, !isPresented else { return false }
         if let dismissal = defaults.object(forKey: dismissedKey) as? Date,
-           date < dismissal.addingTimeInterval(7 * 24 * 60 * 60) { return false }
+           date < dismissal.addingTimeInterval(Self.dismissalCooldown) { return false }
         if let opened = defaults.object(forKey: openedKey) as? Date,
-           date < opened.addingTimeInterval(20 * 24 * 60 * 60) { return false }
+           date < opened.addingTimeInterval(Self.openedCooldown) { return false }
         openedDuringPresentation = false
         isPresented = true
         return true

@@ -6,9 +6,12 @@ import SwiftUI
 
 struct CameraScreen: View {
     @Environment(FilmSession.self) private var film
+    @Environment(AppPurchases.self) private var purchases
+    @EnvironmentObject private var discovery: DiscoveryPreferences
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("grid") private var grid = false
     @State private var showsLibrary = false
+    @State private var showsSupporterPack = false
     @State private var capturedStock: Stock?
     @ObservedObject var camera: CameraService
     @State private var showsExposure = false
@@ -24,6 +27,7 @@ struct CameraScreen: View {
     let isActive: Bool
     let navigationSize: CGSize
     @Binding var navigationShutter: CGRect?
+    let effectsPhoto: CGImage?
     @State private var showsLiveGrading = false
     @State private var gradeSurface = PadSurface.style
     @State private var choosingAccentHue = false
@@ -97,9 +101,15 @@ struct CameraScreen: View {
             }
         }
         .sheet(isPresented: $showsLibrary) { FilmLibrary() }
+        .sheet(isPresented: $showsSupporterPack) { SupporterPackPaywall(photo: effectsPhoto) }
         .sheet(item: $shareItem) { item in
-            PhotoShareSheet(file: item.file, livePhoto: item.livePhoto) { _, error in
-                if error != nil { camera.statusMessage = LanguageManager.text("This photo could not be shared.") }
+            PhotoShareSheet(file: item.file, livePhoto: item.livePhoto) { completed, error in
+                shareItem = nil
+                if error != nil {
+                    camera.statusMessage = LanguageManager.text("This photo could not be shared.")
+                } else if completed {
+                    discovery.presentAfterExport()
+                }
             }
         }
         .task(id: shareVariant) {
@@ -111,6 +121,9 @@ struct CameraScreen: View {
             shareItem = nil
         }
         .onChange(of: camera.isCapturing) { if camera.isCapturing { capturedStock = film.active } }
+        .onChange(of: purchases.canUseSupporterPack) { _, canUseSupporterPack in
+            if !canUseSupporterPack { camera.clearDoubleExposureMode() }
+        }
         .onChange(of: film.active) { camera.updateProfile(stock: film.active, recipe: film.renderRecipe) }
         .onChange(of: film.renderRecipe) { camera.updateProfile(stock: film.active, recipe: film.renderRecipe) }
         .onChange(of: camera.framingRatio) { film.ratio = camera.framingRatio }
@@ -256,7 +269,7 @@ struct CameraScreen: View {
                 navigationShutter = isActive && !showsLiveGrading ? layout.navigationShutter : nil
             }
             .onDisappear { navigationShutter = nil }
-            .onCameraCaptureEvent(isEnabled: isActive && scenePhase == .active && !showsLibrary
+            .onCameraCaptureEvent(isEnabled: isActive && scenePhase == .active && !showsLibrary && !showsSupporterPack
                                   && !showsLiveGrading && camera.shutterReady) { event in
                 if event.phase == .ended { camera.capture() }
             }
@@ -406,8 +419,18 @@ struct CameraScreen: View {
                           camera.isConfiguringLivePhoto || camera.isProcessingCapture)
             }
             if !camera.hpanEnabled {
-                Toggle("Double Exposure", isOn: Binding(get: { camera.doubleExposureEnabled }, set: camera.setDoubleExposure))
-                    .disabled(!camera.canUseDoubleExposure || camera.isCapturing || camera.isProcessingCapture)
+                if purchases.canUseSupporterPack {
+                    Toggle("Double Exposure", isOn: Binding(get: { camera.doubleExposureEnabled }, set: camera.setDoubleExposure))
+                        .disabled(!camera.canUseDoubleExposure || camera.isCapturing || camera.isProcessingCapture)
+                } else {
+                    Button {
+                        showsSupporterPack = true
+                    } label: {
+                        Label("Double Exposure", systemImage: "lock")
+                    }
+                    .accessibilityHint("Requires Supporter Pack")
+                    .disabled(camera.isCapturing || camera.isProcessingCapture)
+                }
             }
         } label: {
             HStack(spacing: 5) {
@@ -887,7 +910,7 @@ struct CameraScreen: View {
                     let title = variant.title(livePhoto: camera.capturedHasMotion)
                     let saved = camera.savedVariants.contains(variant)
                     Button {
-                        camera.saveCapture([variant])
+                        camera.saveCapture([variant]) { discovery.presentAfterExport() }
                     } label: {
                         if saved { Label(title, systemImage: "checkmark") } else { Text(title) }
                     }

@@ -32,7 +32,7 @@ struct SettingsScreen: View {
                 Button {
                     showingSupporterPack = true
                 } label: {
-                    SettingsRow(title: "Supporter Pack", subtitle: "Recipe Kitchen and seven additional Effects")
+                    SettingsRow(title: "Supporter Pack", subtitle: "Recipe Kitchen, Double Exposure, and seven additional Effects")
                 }
             }
 
@@ -180,7 +180,7 @@ struct SettingsScreen: View {
             }
         }
         .task { remoteContent.refreshInBackground() }
-        .sheet(isPresented: $showingSupport) { SupportHibiscus() }
+        .sheet(isPresented: $showingSupport) { SupportHibiscus(effectsPhoto: effectsPhoto) }
         .sheet(isPresented: $showingSupporterPack) { SupporterPackPaywall(photo: effectsPhoto) }
         .onAppear { refreshPhotoPermission() }
         .onChange(of: scenePhase) {

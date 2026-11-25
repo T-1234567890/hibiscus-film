@@ -57,6 +57,7 @@ struct EffectsScreen: View {
 
 private struct EffectProof: View {
     @Environment(AppPurchases.self) private var purchases
+    @EnvironmentObject private var discovery: DiscoveryPreferences
     let photo: EffectPhoto
     let importing: Bool
     let choose: () -> Void
@@ -201,9 +202,13 @@ private struct EffectProof: View {
             SupporterPackPaywall(photo: photo.preview.cgImage)
         }
         .sheet(item: $file, onDismiss: { sharedLivePhoto = nil }) { item in
-            PhotoShareSheet(file: item, livePhoto: sharedLivePhoto) { _, error in
-                if error != nil { message = LanguageManager.text("This photo could not be shared.") }
+            PhotoShareSheet(file: item, livePhoto: sharedLivePhoto) { completed, error in
                 file = nil
+                if error != nil {
+                    message = LanguageManager.text("This photo could not be shared.")
+                } else if completed {
+                    discovery.presentAfterExport()
+                }
             }
         }
         .overlay(alignment: .top) {
@@ -409,7 +414,7 @@ private struct EffectProof: View {
                         request.addResource(with: .photo, fileURL: result.file.url, options: nil)
                         request.addResource(with: .pairedVideo, fileURL: result.motionURL, options: nil)
                     }
-                    if !Task.isCancelled { message = LanguageManager.text("Saved to Photos.") }
+                    finishSave()
                 }
                 return
             }
@@ -424,13 +429,19 @@ private struct EffectProof: View {
                 try await PHPhotoLibrary.shared().performChanges {
                     PHAssetCreationRequest.forAsset().addResource(with: .photo, fileURL: item.url, options: nil)
                 }
-                if !Task.isCancelled { message = LanguageManager.text("Saved to Photos.") }
+                finishSave()
             }
         } catch {
             if !Task.isCancelled {
                 message = destination == .play ? LanguageManager.text("This Live Photo could not be played.")
                     : LanguageManager.text("This photo could not be exported.")
             }
+        }
+    }
+
+    private func finishSave() {
+        if !Task.isCancelled && !discovery.presentAfterExport() {
+            message = LanguageManager.text("Saved to Photos.")
         }
     }
 
